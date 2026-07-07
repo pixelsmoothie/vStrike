@@ -26,5 +26,7 @@ add_executable(PongArena main.cpp
         common/global.h
         entities/ball.h
         entities/ball.cpp
+        physics/physicsEngine.h
+        physics/physicsEngine.cpp
 )
 target_link_libraries(PongArena PRIVATE raylib)

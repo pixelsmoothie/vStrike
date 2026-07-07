@@ -44,8 +44,8 @@ This log tracks daily execution milestones, debugging sessions, structural issue
 ### ⭐ Questions to Research
 * Why are include guards or `#pragma once` strictly necessary in C++ compared to newer languages?
 * Why does compiling/defining non-const global variables in headers throw a duplicate symbol/multiple-definition error at the link stage?
-* What is the difference between `static` and `extern` variables in the context of header files?
-* When should constructors use Member Initializer Lists (`Constructor() : var(val) {}`) instead of assignments in the constructor body?
+* Why is thread-blocking forbidden in real-time callbacks, and what alternatives (like rings/queues) are used to send trigger cues from main thread to audio thread?
+
 ## 📅 Day 2: July 4, 2026
 *Target: Ball Entity, Constructor Initialization List, & Wall Bouncing*
 
@@ -110,4 +110,25 @@ This log tracks daily execution milestones, debugging sessions, structural issue
 ### ⭐ Questions to Research
 * What is the performance cost of calling `DrawRectangleRounded` multiple times per frame on the GPU?
 * How does Raylib's double-buffering (`EndDrawing`) swap system work behind the scenes?
+
+## 📅 Day 4: July 7, 2026
+*Target: Architectural Refactoring & Physics Engine Modularization*
+
+### ✅ Tasks Done
+1. **Window Branding**: Renamed the game window title to the official name `"vStrike"` in `main.cpp`.
+2. **Physics Module Isolation**: Created the `physics/` directory to host physical interactions and scoring rules.
+3. **Collision Extrication**: Extracted all circle-to-rectangle paddle collision math and anti-sticking offset corrections into `ResolveCollision()` inside `physics/physicsEngine.cpp`.
+4. **Scoring Logic Isolation**: Moved screen boundary exit detections, player HP reductions, and default ball resets into `CheckScoreAndReset()` in the new physics module.
+5. **CMake Registration**: Linked the new `physicsEngine` headers and source files in `CMakeLists.txt`.
+6. **Main Loop Decoupling**: Reduced the size of `main()` in `main.cpp` by replacing raw blocks with clean, expressive function calls.
+
+### 🔍 Where I Stuck / Issues Faced
+1. **Relative Directory Paths**: Had to ensure the relative header search paths (`../entities/` and `../common/`) correctly navigated the new folder structure.
+
+### 💀 Mistakes Made
+*None during this sprint. The refactoring compiled cleanly on the first try.*
+
+### 🧠 Concepts Learned
+* **Separation of Concerns (SoC)**: Keeping rendering loop controllers (`main.cpp`) focused on draw orchestration while delegate engines (`physicsEngine.cpp`) govern simulation math.
+* **Pass-by-Reference Modifiers**: Reinforcing usage of `&` parameters in modular functions to prevent object duplication and ensure mutations apply to the live game state.
 

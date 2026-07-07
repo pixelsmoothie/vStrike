@@ -2,9 +2,10 @@
 #include "common/global.h"
 #include "entities/paddle.h"
 #include "entities/ball.h"
+#include "physics/physicsEngine.h"
 
 int main() {
-    InitWindow(WIDTH, HEIGHT, "Raylib Linkage Test");
+    InitWindow(WIDTH, HEIGHT, "vStrike");
     SetTargetFPS(60);
 
     float HT = 150.0f;
@@ -15,8 +16,6 @@ int main() {
     Ball ball(WIDTH/2, HEIGHT/2, 15.0f, 300.0f, 280.0f, GREEN);
 
     float multiplier = 1.3f;
-
-    float rad = ball.radius;
 
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -32,35 +31,9 @@ int main() {
 
         ball.Update(GetFrameTime());
 
-        Vector2 center = {ball.Cx, ball.Cy};
-        Rectangle Rec{paddle1.x, paddle1.y, paddle1.width, paddle1.height};
-        Rectangle Rec1{paddle2.x, paddle2.y, paddle2.width, paddle2.height};
+        ResolveCollision(ball, paddle1, paddle2);
 
-        if (CheckCollisionCircleRec(center, rad, Rec))
-        {
-            ball.Cx = paddle1.x + paddle1.width + ball.radius;
-            ball.speedX *= -1;
-        };
-
-        if (CheckCollisionCircleRec(center, rad, Rec1))
-        {
-            ball.Cx = paddle2.x - ball.radius;
-            ball.speedX *= -1;
-        };
-
-        if (ball.Cx < 0)
-        {
-            paddle1.hp -= 50;
-            ball.Cx = WIDTH/2;
-            ball.Cy = HEIGHT/2;
-        }
-
-        if (ball.Cx > WIDTH)
-        {
-            paddle2.hp -= 50;
-            ball.Cx = WIDTH/2;
-            ball.Cy = HEIGHT/2;
-        }
+        CheckScoreAndReset(ball, paddle1, paddle2);
 
         if (paddle1.hp == 0 || paddle2.hp == 0)
         {
