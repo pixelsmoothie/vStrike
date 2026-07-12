@@ -1,0 +1,16 @@
+//
+// Created by Niraj on 12-07-2026.
+//
+
+#ifndef PONGARENA_GAMESTATES_H
+#define PONGARENA_GAMESTATES_H
+
+enum class GameStates
+{
+    STATE_MENU,
+    STATE_CHAR_SELECT,
+    STATE_GAMEPLAY,
+    STATE_GAMEOVER
+};
+
+#endif //PONGARENA_GAMESTATES_H

@@ -1,15 +1,17 @@
 #include "raylib.h"
-#include "common/global.h"
+#include "global/constants.h"
 #include "entities/paddle.h"
 #include "entities/ball.h"
 #include "physics/physicsEngine.h"
+#include "UI/HealthBar.h"
+#include "global/gameStates.h"
 
 int main() {
     InitWindow(WIDTH, HEIGHT, "vStrike");
     SetTargetFPS(60);
 
-    float HT = 150.0f;
-
+    //PADDLE OBJECTS
+    constexpr float HT = 150.0f;
     Paddle paddle1(10.0f, HEIGHT/2 - HT/2, 30.0f, HT, 400.0f, BLACK, KEY_S, KEY_W, 100.0f, 100.0f);
     Paddle paddle2(WIDTH - 40.0f, HEIGHT/2 - HT/2, 30.0f, HT, 400.0f, RAYWHITE, KEY_DOWN, KEY_UP, 100.0f, 100.0f);
 
@@ -20,66 +22,28 @@ int main() {
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(DARKGRAY);
-        DrawLine(WIDTH / 2, 0, WIDTH / 2, HEIGHT, GRAY);
+
+        //DRAWING ENTITIES
         paddle1.Draw();
         paddle2.Draw();
-
         ball.Draw();
 
+        //ENTITY MOVEMENT
         paddle1.Update(GetFrameTime());
         paddle2.Update(GetFrameTime());
-
         ball.Update(GetFrameTime());
 
+        //PHYSICS ENGINE
         ResolveCollision(ball, paddle1, paddle2);
-
         CheckScoreAndReset(ball, paddle1, paddle2);
+        GameOutcomeAndRestart(ball, paddle1, paddle2, multiplier);
 
-        if (paddle1.hp == 0 || paddle2.hp == 0)
-        {
-            DrawRectangle(0, 0, WIDTH, HEIGHT, Fade(BLACK, 0.6f));
-            ball.speedX = 0;
-            ball.speedY = 0;
-            ball.Cx = WIDTH/2;
-            ball.Cy = HEIGHT/2;
-            if (paddle1.hp == 0)
-            {
-                DrawText("Player 2 Wins", (WIDTH - 350) / 2, (HEIGHT - 60) / 2, 60, WHITE);
-            }else
-            {
-                DrawText("Player 1 Wins", (WIDTH - 350) / 2, (HEIGHT - 60) / 2, 60, WHITE);
-            }
+        //UI ELEMENTS
+        DrawLine(WIDTH / 2, 0, WIDTH / 2, HEIGHT, GRAY);
+        RenderHealthBars(paddle1, paddle2);
 
-            DrawText("Press [R] to restart", (WIDTH - 500) / 2, (HEIGHT - 300) / 2, 50, RED);
-            if (IsKeyPressed(KEY_R))
-            {
-                paddle1.hp = 100.0f;
-                paddle2.hp = 100.0f;
-                ball.speedX += 300 * multiplier;
-                ball.speedY += 280 * multiplier;
-                multiplier += 0.4f;
-            }
-        }
-
-        float percent1 = paddle1.hp / paddle1.maxHp;
-        float percent2 = paddle2.hp / paddle2.maxHp;
-
-        Rectangle rect;
-        rect.x = WIDTH - 480;
-        rect.y = 10;
-        rect.width = percent2 * 400;
-        rect.height = 20;
-        DrawRectangleRounded(rect, 0.4f, 8, GREEN);
-
-        Rectangle rect1;
-        rect1.x = 80;
-        rect1.y = 10;
-        rect1.width = percent1 * 400;
-        rect1.height = 20;
-        DrawRectangleRounded(rect1, 0.4f, 8, GREEN);
         EndDrawing();
     }
-
     CloseWindow();
     return 0;
 }

@@ -2,7 +2,7 @@
 // Created by Niraj on 04-07-2026.
 //
 #include "ball.h"
-#include "../common/global.h"
+#include "../global/constants.h"
 
 void Ball ::  Draw()
 {

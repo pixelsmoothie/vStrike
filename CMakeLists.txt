@@ -23,10 +23,13 @@ FetchContent_MakeAvailable(raylib)
 add_executable(PongArena main.cpp
         entities/paddle.h
         entities/paddle.cpp
-        common/global.h
+        global/constants.h
         entities/ball.h
         entities/ball.cpp
         physics/physicsEngine.h
         physics/physicsEngine.cpp
+        UI/HealthBar.h
+        UI/HealthBar.cpp
+        global/gameStates.h
 )
 target_link_libraries(PongArena PRIVATE raylib)

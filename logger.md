@@ -111,6 +111,27 @@ This log tracks daily execution milestones, debugging sessions, structural issue
 * What is the performance cost of calling `DrawRectangleRounded` multiple times per frame on the GPU?
 * How does Raylib's double-buffering (`EndDrawing`) swap system work behind the scenes?
 
+## 📅 Day 5: July 12, 2026
+*Target: Codebase Modularity Refactoring & GameState Enum Class*
+
+### ✅ Tasks Done
+1. **HUD Modularity**: Decoupled the HUD health bar rendering into a dedicated `UI/HealthBar.h` and `UI/HealthBar.cpp` module.
+2. **Outcome Decoupling**: Moved the win state screen dimming, text overlay, and restart logic into `GameOutcomeAndRestart()` inside `physics/physicsEngine.cpp`.
+3. **Core Loop Cleanliness**: Reduced the size of `main.cpp` to a compact 49-line main loop.
+4. **Header Architecture Splitting**: Renamed the `common/` folder to `global/` and split its contents into `global/constants.h` (dimensions) and a new `global/gameStates.h` (state enums).
+5. **Type-Safe Game States**: Declared a modern C++ `enum class GameStates` containing `STATE_MENU`, `STATE_CHAR_SELECT`, `STATE_GAMEPLAY`, and `STATE_GAMEOVER`.
+
+### 🔍 Where I Stuck / Issues Faced
+1. **Compilation Paths Update**: Had to verify and update relative include paths in `main.cpp` and `CMakeLists.txt` to reflect the folder migration from `common/` to `global/`.
+
+### 💀 Mistakes Made
+*None during this short 1-hour session. Clean execution.*
+
+### 🧠 Concepts Learned
+* **Modern C++ Strong Typing (`enum class`)**: Understanding the scope advantages of scoped enums (`enum class`) over traditional C-style enums, preventing naming collisions.
+* **Component-Level UI Separation**: Isolating visual rendering details from state controllers.
+
+
 ## 📅 Day 4: July 7, 2026
 *Target: Architectural Refactoring & Physics Engine Modularization*
 

@@ -2,7 +2,7 @@
 // Created by Niraj on 03-07-2026.
 //
 #include "paddle.h"
-#include "../common/global.h"
+#include "../global/constants.h"
 #include "ball.h"
 
 void Paddle :: Draw()
