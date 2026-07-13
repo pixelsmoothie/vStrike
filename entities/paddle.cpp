@@ -13,7 +13,7 @@ void Paddle :: Draw()
     rect.width = width;
     rect.height = height;
 
-    DrawRectangleRounded(rect, 0.4f, 8, color);
+    DrawRectangleRoundedLines(rect, 0.4f, 16, 1.0f, color);
 }
 
 void Paddle :: Update(float deltaTime)

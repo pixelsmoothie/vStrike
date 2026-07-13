@@ -30,14 +30,14 @@ void CheckScoreAndReset(Ball& ball, Paddle& paddle1, Paddle& paddle2)
 {
     if (ball.Cx < 0)
     {
-        paddle1.hp -= 50;
+        paddle1.hp -= 20;                          //amount of hp to be reduced on miss
         ball.Cx = WIDTH/2;
         ball.Cy = HEIGHT/2;
     }
 
     if (ball.Cx > WIDTH)
     {
-        paddle2.hp -= 50;
+        paddle2.hp -= 20;
         ball.Cx = WIDTH/2;
         ball.Cy = HEIGHT/2;
     }
@@ -52,15 +52,21 @@ void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& 
         ball.speedY = 0;
         ball.Cx = WIDTH/2;
         ball.Cy = HEIGHT/2;
+        
         if (paddle1.hp == 0)
         {
-            DrawText("Player 2 Wins", (WIDTH - 350) / 2, (HEIGHT - 60) / 2, 60, WHITE);
+            int textWidth = MeasureText("Player 2 Wins", 60);
+            DrawText("Player 2 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
         }else
         {
-            DrawText("Player 1 Wins", (WIDTH - 350) / 2, (HEIGHT - 60) / 2, 60, WHITE);
+            int textWidth = MeasureText("Player 2 Wins", 60);
+            DrawText("Player 1 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
         }
 
-        DrawText("Press [R] to restart", (WIDTH - 500) / 2, (HEIGHT - 300) / 2, 50, RED);
+        // Draw restart text below the winner text instead of above it
+        int textWidth = MeasureText("Player 2 Wins", 60);
+        DrawText("Press [R] to restart", (WIDTH - textWidth) / 2, 450, 50, RED);
+
         if (IsKeyPressed(KEY_R))
         {
             paddle1.hp = 100.0f;

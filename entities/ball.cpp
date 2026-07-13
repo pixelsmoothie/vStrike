@@ -13,13 +13,13 @@ void Ball :: Update(float deltaTime)
 {
     Cx += (speedX * deltaTime);
     Cy += (speedY * deltaTime);
-    if (Cy - radius <= 0)             //Top Collision Detection
+    if (Cy - radius <= 40)               //Top Collision Detection
     {
-        Cy = radius;                  //To avoid the endless jitter loop
+        Cy = 40 + radius;                //To avoid the endless jitter loop
         speedY *= -1;
     }
 
-    if (Cy + radius >= HEIGHT)       //Bottom Collision Detection
+    if (Cy + radius >= HEIGHT)           //Bottom Collision Detection
     {
         Cy = HEIGHT - radius;
         speedY *= -1;
