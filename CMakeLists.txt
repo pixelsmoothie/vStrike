@@ -30,6 +30,9 @@ add_executable(PongArena main.cpp
         physics/physicsEngine.cpp
         UI/HealthBar.h
         UI/HealthBar.cpp
-        global/gameStates.h
+        global/states/gameStates.h
+        global/states/gameScreen.h
+        global/states/menuScreen.h
+        global/states/settingScreen.h
 )
 target_link_libraries(PongArena PRIVATE raylib)
