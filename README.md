@@ -1,4 +1,4 @@
-# Pong Battle Game
+# vStrike (Action-RPG Battle Pong)
 
 A simple battle-style Pong game built in C++ with Raylib.  
 Currently supports menu navigation, paddle/ball gameplay, scoring, and health bars.
