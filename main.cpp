@@ -7,6 +7,7 @@
 #include "UI/HealthBar.h"
 #include "global/states/gameStates.h"
 #include "global/states/menuScreen.h"
+#include "global/states/settingScreen.h"
 
 int main()
 {
@@ -68,6 +69,10 @@ int main()
                 {
                 case GameStates::STATE_MENU:
                     currentScreen = new MenuScreen();
+                    break;
+
+                case GameStates::STATE_SETTINGS:
+                    currentScreen = new SettingsScreen();
                     break;
 
                 case GameStates::STATE_GAMEPLAY:

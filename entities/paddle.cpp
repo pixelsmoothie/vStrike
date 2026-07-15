@@ -21,9 +21,9 @@ void Paddle :: Update(float deltaTime)
     if (IsKeyDown(upKey))
     {
         y -= (speed * deltaTime);
-        if (y < 0)
+        if (y < 40)
         {
-             y = 0;
+             y = 40;
         }
     }
 

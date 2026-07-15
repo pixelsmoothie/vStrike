@@ -10,12 +10,31 @@
 
 class MenuScreen : public GameScreen
 {
+private:
+    float W = WIDTH / 2;
+    float H = HEIGHT / 2;
+
+    Rectangle startButton = {W - 120, H - 30, 240, 60};
+    Rectangle settingsButton = {W - 120, H + 60, 240, 60};
+    bool isPressed = false;
 public:
     GameStates Update(float dt) override
     {
-        if (IsKeyPressed(KEY_ENTER))
+        isPressed = false;
+        Vector2 mousePos = GetMousePosition();
+        if (CheckCollisionPointRec(mousePos, settingsButton))
         {
-            return GameStates::STATE_GAMEPLAY;
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                return GameStates::STATE_SETTINGS;
+            }
+        }
+        else if (CheckCollisionPointRec(mousePos, startButton))
+        {
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                return GameStates::STATE_GAMEPLAY;
+            }
         }
         return GameStates::STATE_MENU;
     }
@@ -26,10 +45,17 @@ public:
         ClearBackground(Color{ 20, 20, 20, 255 }); 
 
         // Large, clean white title
-        DrawText("vstrike", 1280 / 2 - 120, 300, 70, RAYWHITE);
+        DrawText("vstrike", W - 120, 220, 70, RAYWHITE);
 
-        // Faded, quiet start instruction
-        DrawText("press enter", 1280 / 2 - 70, 420, 24, Color{ 80, 80, 80, 255 });
+        // START BUTTON
+        DrawRectangleRoundedLines(startButton, 0.4f, 16, 3.0f, RAYWHITE);
+        const int textSizeStart = MeasureText("START", 34);
+        DrawText("START", (WIDTH - textSizeStart) / 2, H - 17, 34, Color{ 100, 100, 100, 255 });
+
+        // SETTINGS BUTTON
+        DrawRectangleRoundedLines(settingsButton, 0.4f, 16, 3.0f, RAYWHITE);
+        const int textSizeSettings = MeasureText("SETTINGS", 34);
+        DrawText("SETTINGS", (WIDTH - textSizeSettings) / 2, H + 75, 34, Color{ 100, 100, 100, 255 });
     }
 };
 #endif //PONGARENA_MENUSCREEN_H
