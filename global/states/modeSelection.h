@@ -13,14 +13,58 @@ private:
     float W = WIDTH / 2;
     float H = HEIGHT / 2;
 
-    Rectangle Trigger = {W - 75, H - 75, 150, 150};
+    Texture2D modeBG, Local, Multiplayer, AI;
+    Texture2D L, R;
+
+    Rectangle Trigger = {W - 130, H + 165, 260, 60};
+    Rectangle LeftNav = {100, H - 65, 150, 150};
+    Rectangle RightNav = {WIDTH - 220, H - 65, 150, 150};
 
     int selectedState = 0;
 
 public:
+
+    ModeSelection()
+    {
+        modeBG = LoadTexture("assets/UI/BG/menu_bg.png");
+        Local = LoadTexture("assets/UI/Modes/icon_local_1v1@2x.png");
+        Multiplayer = LoadTexture("assets/UI/Modes/icon_multiplayer@2x.png");
+        AI = LoadTexture("assets/UI/Modes/icon_vs_bot@2x.png");
+
+        L = LoadTexture("assets/UI/Modes/icon_arrow_left_v2.png");
+        R = LoadTexture("assets/UI/Modes/icon_arrow_right_v2.png");
+    }
+
+    ~ModeSelection()
+    {
+        UnloadTexture(modeBG);
+        UnloadTexture(Local);
+        UnloadTexture(Multiplayer);
+        UnloadTexture(AI);
+
+        UnloadTexture(L);
+        UnloadTexture(R);
+    }
+
+
     GameStates Update(float dt) override
     {
         Vector2 mousePos = GetMousePosition();
+
+        if (CheckCollisionPointRec(mousePos, RightNav))
+        {
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                selectedState = (selectedState + 1) % 3;
+            }
+        }
+        else if (CheckCollisionPointRec(mousePos, LeftNav))
+        {
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                selectedState = (selectedState - 1 + 3) % 3;
+            }
+        }
 
         float scrollState = GetMouseWheelMove();
         if (scrollState > 0)
@@ -45,21 +89,33 @@ public:
 
     void Draw() override
     {
-        ClearBackground(Color{20, 20, 20, 255});
+        DrawTexture(modeBG, 0, 0, WHITE);
+
         int Label = MeasureText("SELECT MODE", 60);
-        DrawText("SELECT MODE", (WIDTH - Label) / 2, 200, 60, RAYWHITE);
+        DrawText("SELECT MODE", (WIDTH - Label) / 2, 150, 60, RAYWHITE);
+
+        //DrawLine(W, 0, W, HEIGHT, RAYWHITE);
+        //DrawLine(0, H, WIDTH, H, RAYWHITE);
+
+        DrawTexture(L, 100, H - 65, WHITE);
+        DrawTexture(R, WIDTH - 220, H - 65, WHITE);
+
+        DrawRectangleRoundedLines(Trigger, 0.4f, 16, 1.0f, RAYWHITE);
 
         if (selectedState == 0)
         {
-            DrawRectangleRoundedLines(Trigger, 0.4f, 16, 3.0f, RAYWHITE);
+            DrawTexture(Local, W - 128 , H - 128, WHITE);
+            DrawCustomText("LOCAL 1v1", W - 108, H + 170, 50, RAYWHITE);
         }
         else if (selectedState == 1)
         {
-            DrawRectangleRoundedLines(Trigger, 0.4f, 16, 3.0f, GREEN);
+            DrawTexture(AI, W - 128, H - 128, WHITE);
+            DrawCustomText("R-BOT", W - 68, H + 170, 50, RAYWHITE);
         }
         else if (selectedState == 2)
         {
-            DrawRectangleRoundedLines(Trigger, 0.4f, 16, 3.0f, VIOLET);
+            DrawTexture(Multiplayer, W - 128, H - 128, WHITE);
+            DrawCustomText("ONLINE", W - 78, H + 170, 50, RAYWHITE);
         }
     }
 };

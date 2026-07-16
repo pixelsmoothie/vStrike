@@ -10,9 +10,24 @@
 class SettingsScreen : public GameScreen
 {
 private:
-    Rectangle backButton = {(WIDTH/2) - 40, (HEIGHT/2) - 20, 80, 40};
+    int H = HEIGHT / 2;
+    int W = WIDTH / 2;
+
+    Texture2D settingsBG;
+
+    Rectangle backButton = {W - 120, H + 60, 240, 60};
     bool isPressed = false;
 public:
+    SettingsScreen()
+    {
+        settingsBG = LoadTexture("assets/UI/BG/menu_bg.png");
+    }
+
+    ~SettingsScreen()
+    {
+        UnloadTexture(settingsBG);
+    }
+
     GameStates Update(float dt) override
     {
         isPressed = false;
@@ -29,9 +44,11 @@ public:
 
     void Draw() override
     {
-        int textSize = MeasureText("This Is Settings IN DEV", 60);
-        DrawText("This Is Settings IN DEV", (WIDTH - textSize) / 2, (HEIGHT / 2) - 200, 60, RED);
-        DrawRectangleRoundedLines(backButton, 0.4f, 16, 3.0f, BLUE);
+        DrawTexture(settingsBG, 0, 0, WHITE);
+
+        DrawRectangleRoundedLines(backButton, 0.4f, 16, 2.0f, RAYWHITE);
+        const int textSizeSettings = MeasureText("SETTINGS", 45);
+        DrawCustomText("BACK", (WIDTH + 47 - textSizeSettings) / 2, (HEIGHT / 2) + 68, 45, RAYWHITE);
     }
 };
 #endif //PONGARENA_SETTINGSCREEN_H

@@ -71,7 +71,7 @@ public:
         if (state != FadeStates::STATE_NONE)
         {
             unsigned alphaRate = static_cast<unsigned char>(alpha * 255.0f);
-            DrawRectangle(0, 0, WIDTH, HEIGHT, Color{0,0,0, alphaRate});
+            DrawRectangle(0, 0, WIDTH, HEIGHT, Color{0,0,0,  alphaRate});
         }
     }
     bool IsIdle() const

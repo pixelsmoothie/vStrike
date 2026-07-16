@@ -10,8 +10,11 @@ class LocalView : public GameView
 {
 private:
     bool isPaused = false;
+    //BACKGROUND
     Rectangle OverlayBG = {(WIDTH / 2) - 200, 200, 400, 400};
     Rectangle OverlayOutline = {(WIDTH / 2) - 201, 201, 402, 402};
+
+    //BUTTONS
     Rectangle Resume = {(WIDTH / 2) - 150, 250, 300, 70};
     Rectangle Settings = {(WIDTH / 2) - 150, 360, 300, 70};
     Rectangle Exit = {(WIDTH / 2) - 150, 480, 300, 70};
@@ -63,11 +66,12 @@ public:
 
         if (isPaused)
         {
+            //BACKGROUND
             DrawRectangleGradientV(0, 0, WIDTH, HEIGHT, color1, color2);
             DrawRectangleRounded(OverlayBG, 0.4f, 16, color2);
             DrawRectangleRoundedLines(OverlayOutline, 0.4f, 16, 1.0f, BLACK);
 
-
+            //BUTTONS
             DrawCustomText("RESUME", (WIDTH / 2) - 100, 255, 60, RAYWHITE);
             DrawRectangleRoundedLines(Resume, 0.4f, 16, 2.0f,BLACK);
 

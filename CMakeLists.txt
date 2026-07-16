@@ -20,6 +20,8 @@ set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(raylib)
 
+include_directories(${CMAKE_SOURCE_DIR}/DSP)
+
 add_executable(PongArena main.cpp
         entities/paddle.h
         entities/paddle.cpp
@@ -41,7 +43,11 @@ add_executable(PongArena main.cpp
         core/aiView.h
         UI/fader.h
         global/customFont.h
+        DSP/soundTest.h
+        DSP/portaudio.h
 )
 target_link_libraries(PongArena PRIVATE raylib)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/UI/BG DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+

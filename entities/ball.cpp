@@ -6,7 +6,7 @@
 
 void Ball ::  Draw()
 {
-    DrawCircle((int)Cx, (int)Cy, radius, color);
+    DrawCircleLines((int)Cx, (int)Cy, radius, color);
 }
 
 void Ball :: Update(float deltaTime)

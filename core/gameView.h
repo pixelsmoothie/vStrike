@@ -22,7 +22,7 @@ protected:
 public:
     GameView() : paddle1(10.0f, HEIGHT / 2 - 150.0f / 2, 30.0f, 150.0f, 400.0f, RAYWHITE, KEY_S, KEY_W, 100.0f, 100.0f),
                  paddle2(WIDTH - 40.0f, HEIGHT / 2 - 150.0f / 2, 30.0f, 150.0f, 400.0f, RAYWHITE, KEY_DOWN, KEY_UP, 100.0f, 100.0f),
-                 ball(WIDTH / 2, HEIGHT / 2, 15.0f, 500.0f, 360.0f, GREEN),
+                 ball(WIDTH / 2, HEIGHT / 2, 15.0f, 500.0f, 360.0f, RAYWHITE),
                  multiplier(1.3f) {}
 
     GameStates Update(float dt) override = 0;
@@ -30,8 +30,8 @@ public:
     void Draw() override {
         paddle1.Draw();
         paddle2.Draw();
-        ball.Draw();
         DrawLine(WIDTH / 2, 40, WIDTH / 2, HEIGHT , GRAY);
+        ball.Draw();
         DrawLine(0, 40, WIDTH, 40, RAYWHITE);
         RenderHealthBars(paddle1, paddle2);
     }
