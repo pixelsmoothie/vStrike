@@ -12,20 +12,33 @@ This log tracks daily execution milestones, debugging sessions, structural issue
 2. **Shared Rendering & Physics**: Implemented the common `Draw()` and `updatePhysics(dt)` methods inside `GameView` to eliminate all code duplication between game modes.
 3. **Derived View Screens**: Created `LocalView` (`core/localView.h`) and `AIView` (`core/aiView.h`) inheriting from `GameView` to specialize keyboard vs static AI behaviors.
 4. **Mode Selection Integration**: Wired mouse selection clicks on the selection menu to load either the local 1v1 gameplay or the AI court.
+5. **Global Fade Transitions**: Implemented the `Fader` class (`UI/fader.h`) to handle smooth black screen fade-outs and fade-ins during state transitions.
+6. **High-Res Font Loading**: Loaded `.otf` custom typography using `LoadFontEx` at a large 96px resolution, applying bilinear filtering to prevent blurry scaling.
+7. **Pause State & Menu Overlay**: Programmed a keyboard space-toggle to freeze physics/movements while rendering a translucent gradient overlay with custom font buttons ("RESUME", "SETTINGS", "EXIT").
 
 ### Where I Stuck / Issues Faced
 1. **Scope and Placement Constraints**: Resolved a compiler error where statements (`updatePhysics`) were incorrectly written outside member function bodies in `localView.h`.
 2. **Pointer Type Syntax Warning**: Resolved a CLion dangling pointer warning by nullifying `currentScreen = nullptr` immediately after calling `delete` in the swapper.
 3. **Copy-Paste Router Instantiation**: Resolved a bug where AI mode loaded the local court because of a copy-pasted class name (`new LocalView()`) in `main.cpp`'s switch block.
 4. **Input Method Typo**: Resolved mouse click failures on the mode selection buttons by changing `IsKeyPressed` to `IsMouseButtonPressed`.
+5. **Dangling Logical Else**: Found that omitting `else if` for scroll checks (leaving it as a raw `else`) evaluated stationary scroll wheels (`0.0f`) as a backward scroll, causing the selection state to flash at 60 FPS.
+6. **Unreachable Code Warnings**: Discovered a logic error where the starting state in `Start()` was set to `STATE_OUT` instead of `STATE_IN`, making the entire fade-in update block dead code.
+7. **Parser Failure with Hanging Operators**: Found that an incomplete `&&` operator on a conditional check broke code compilation and created ghost Clangd warnings on unrelated symbols.
 
 ### Mistakes Made
 * **Copy-Paste Class Name**: Instantiated the wrong class under the `STATE_AI_VIEW` case block.
+* **Dangling Else on Scroll Check**: Left scroll logic falling into the negative-wrap block when mouse movement was zero.
+* **Mismatched Initial Transition State**: Initialized the fader to the outgoing state instead of the incoming state.
 
 ### Concepts Learned
 * **C++ Protected Access Modifier**: Using `protected:` to let derived classes read/write member data of the parent class while keeping it hidden from the rest of the program.
 * **Pure Virtual vs. Overridden Virtuals**: Understanding when to write a pure virtual function (`= 0`) to force derived class implementation vs. implementing a shared method directly in the base class to avoid duplication.
 * **Dangling Pointer Safety**: Nullifying deleted pointers immediately to prevent them from pointing to deallocated memory blocks.
+* **Modulo Carousel wrapping**: Using positive modulo offsets to easily rotate menu index loops.
+* **Ternary Operator syntax**: Refreshing shorthand evaluations `(condition) ? trueVal : falseVal`.
+* **Texture Resizing and Scaling**: Understanding why low-res rasterized fonts blur when scaled up, and how to scale down high-res atlases using `LoadFontEx` and `SetTextureFilter`.
+* **Unreachable Code analysis**: Using IDE compiler warnings to detect logic paths that are impossible to reach.
+
 
 
 ## Day 7: July 15, 2026
