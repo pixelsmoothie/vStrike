@@ -7,6 +7,7 @@
 #include "gameStates.h"
 #include "gameScreen.h"
 #include "raylib.h"
+#include "../customFont.h"
 
 class MenuScreen : public GameScreen
 {
@@ -33,7 +34,7 @@ public:
         {
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                return GameStates::STATE_GAMEPLAY;
+                return GameStates::STATE_MODE_SELECTION;
             }
         }
         return GameStates::STATE_MENU;
@@ -45,17 +46,17 @@ public:
         ClearBackground(Color{ 20, 20, 20, 255 }); 
 
         // Large, clean white title
-        DrawText("vstrike", W - 120, 220, 70, RAYWHITE);
+        DrawCustomText("vstrike", W - 120, 220, 70, RAYWHITE);
 
         // START BUTTON
         DrawRectangleRoundedLines(startButton, 0.4f, 16, 3.0f, RAYWHITE);
         const int textSizeStart = MeasureText("START", 34);
-        DrawText("START", (WIDTH - textSizeStart) / 2, H - 17, 34, Color{ 100, 100, 100, 255 });
+        DrawCustomText("START", (WIDTH - textSizeStart) / 2, H - 17, 34, Color{ 100, 100, 100, 255 });
 
         // SETTINGS BUTTON
         DrawRectangleRoundedLines(settingsButton, 0.4f, 16, 3.0f, RAYWHITE);
         const int textSizeSettings = MeasureText("SETTINGS", 34);
-        DrawText("SETTINGS", (WIDTH - textSizeSettings) / 2, H + 75, 34, Color{ 100, 100, 100, 255 });
+        DrawCustomText("SETTINGS", (WIDTH - textSizeSettings) / 2, H + 75, 34, Color{ 100, 100, 100, 255 });
     }
 };
 #endif //PONGARENA_MENUSCREEN_H

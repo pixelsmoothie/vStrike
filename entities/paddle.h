@@ -12,8 +12,8 @@ struct Paddle
     float y;
     float width;
     float height;
-    float round;
-    int segments;
+    float round{};
+    int segments{};
     float speed;
     Color color;
     int downKey;
@@ -26,6 +26,7 @@ struct Paddle
 
     Paddle(float startX, float startY, float w, float h, float s, Color c, int dKey, int uKey, float hp, float maxHp) :
     x(startX), y(startY), width(w), height(h), speed(s), color(c), downKey(dKey), upKey(uKey), hp(hp), maxHp(maxHp) {}
+
 };
 
 #endif //PONGARENA_PADDLE_H

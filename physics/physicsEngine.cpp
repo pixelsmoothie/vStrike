@@ -3,6 +3,7 @@
 //
 #include "physicsEngine.h"
 #include "../global/constants.h"
+#include "../global/customFont.h"
 
 
 void ResolveCollision(Ball& ball, Paddle& paddle1, Paddle& paddle2)
@@ -56,16 +57,16 @@ void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& 
         if (paddle1.hp == 0)
         {
             int textWidth = MeasureText("Player 2 Wins", 60);
-            DrawText("Player 2 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
+            DrawCustomText("Player 2 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
         }else
         {
             int textWidth = MeasureText("Player 2 Wins", 60);
-            DrawText("Player 1 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
+            DrawCustomText("Player 1 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
         }
 
         // Draw restart text below the winner text instead of above it
         int textWidth = MeasureText("Player 2 Wins", 60);
-        DrawText("Press [R] to restart", (WIDTH - textWidth) / 2, 450, 50, RED);
+        DrawCustomText("Press [R] to restart", (WIDTH - textWidth) / 2, 450, 50, RED);
 
         if (IsKeyPressed(KEY_R))
         {

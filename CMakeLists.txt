@@ -34,5 +34,14 @@ add_executable(PongArena main.cpp
         global/states/gameScreen.h
         global/states/menuScreen.h
         global/states/settingScreen.h
+        global/states/modeSelection.h
+        global/states/masterIncluder.h
+        core/gameView.h
+        core/localView.h
+        core/aiView.h
+        UI/fader.h
+        global/customFont.h
 )
 target_link_libraries(PongArena PRIVATE raylib)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
