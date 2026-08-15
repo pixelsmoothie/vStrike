@@ -45,6 +45,7 @@ add_executable(PongArena main.cpp
         global/customFont.h
         DSP/soundTest.h
         DSP/portaudio.h
+        core/qBrain.h
 )
 target_link_libraries(PongArena PRIVATE raylib)
 

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Full Q-Learning Loop Visualizer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .panel {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .code-panel {
+            border-right: 2px solid #333;
+            background-color: #1e1e1e;
+            font-size: 13px;
+        }
+        .memory-panel {
+            background-color: #252526;
+        }
+        .line {
+            padding: 3px 8px;
+            margin: 1px 0;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            color: #9cdcfe;
+            transition: background-color 0.2s;
+        }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .active-line {
+            background-color: #063970;
+            border-left: 4px solid #4fc1ff;
+            font-weight: bold;
+        }
+        h2 { color: #fff; margin-top: 0; font-size: 20px; }
+        .btn {
+            padding: 10px 20px;
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .btn:hover { background-color: #1177bb; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+        }
+        th, td { border: 1px solid #444; padding: 8px; text-align: center; }
+        th { background-color: #333; color: #fff; }
+        .highlight-cell { background-color: #1e4620 !important; color: #4af55b; font-weight: bold; }
+        
+        .var-box {
+            background: #333;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+        }
+        .var-row { display: flex; justify-content: space-between; margin-bottom: 5px; border-bottom: 1px solid #444; padding-bottom: 3px; }
+        .var-val { color: #ce9178; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="panel code-panel">
+        <h2>Full AI Loop Execution</h2>
+        <button class="btn" onclick="nextStep()" id="stepBtn">Start Execution</button>
+        <button class="btn" onclick="reset()" style="background-color: #555;">Reset</button>
+
+        <div id="code-container">
+            <!-- Get State -->
+            <div class="line" id="l0"><span class="keyword">int</span> getStateID(ball, paddle) {</div>
+            <div class="line" id="l1">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> ballX = ball.Cx / 300; <span class="comment">// 750/300 = 2</span></div>
+            <div class="line" id="l2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> ballY = ball.Cy / 100; <span class="comment">// 400/100 = 4</span></div>
+            <div class="line" id="l3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> padY  = paddle.y / 100; <span class="comment">// 600/100 = 6</span></div>
+            <div class="line" id="l4">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> stateID = ballX + (ballY*4) + (padY*32);</div>
+            <div class="line" id="l5">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> stateID;</div>
+            <div class="line" id="l6">}</div>
+            <br>
+            <!-- Choose Action -->
+            <div class="line" id="l7"><span class="keyword">int</span> chooseAction(<span class="keyword">int</span> stateID) {</div>
+            <div class="line" id="l8">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> r = GetRandomValue(0, 100) / 100.0f;</div>
+            <div class="line" id="l9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (r < epsilon) {</div>
+            <div class="line" id="l10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> GetRandomValue(0, 2); <span class="comment">// EXPLORE</span></div>
+            <div class="line" id="l11">&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {</div>
+            <div class="line" id="l12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// EXPLOIT</span></div>
+            <div class="line" id="l13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> maxQ = qTable[stateID][0];</div>
+            <div class="line" id="l14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> bestAction = 0;</div>
+            <div class="line" id="l15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = 1; i < 3; i++) {</div>
+            <div class="line" id="l16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (qTable[stateID][i] > maxQ) {</div>
+            <div class="line" id="l17">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxQ = qTable[stateID][i]; bestAction = i;</div>
+            <div class="line" id="l18">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+            <div class="line" id="l19">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+            <div class="line" id="l20">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> bestAction;</div>
+            <div class="line" id="l21">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+            <div class="line" id="l22">}</div>
+            <br>
+            <!-- Update Physics (Virtual) -->
+            <div class="line" id="l23" style="color:#d32f2f; font-weight:bold;">// ... PHYSICS ENGINE RUNS ... </div>
+            <div class="line" id="l24" style="color:#d32f2f; font-weight:bold;">// Ball moves, checks collision -> Hits Paddle! Reward = 100!</div>
+            <br>
+            <!-- Update Table -->
+            <div class="line" id="l25"><span class="keyword">void</span> updateQTable(<span class="keyword">int</span> state, <span class="keyword">int</span> act, <span class="keyword">int</span> nextState, <span class="keyword">float</span> reward) {</div>
+            <div class="line" id="l26">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> maxFutureQ = qTable[nextState][0];</div>
+            <div class="line" id="l27">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = 1; i < 3; i++) {</div>
+            <div class="line" id="l28">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (qTable[nextState][i] > maxFutureQ)</div>
+            <div class="line" id="l29">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxFutureQ = qTable[nextState][i];</div>
+            <div class="line" id="l30">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+            <div class="line" id="l31">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> currentQ = qTable[state][act];</div>
+            <div class="line" id="l32">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> learnedValue = reward + (0.9f * maxFutureQ);</div>
+            <div class="line" id="l33">&nbsp;&nbsp;&nbsp;&nbsp;qTable[state][act] = currentQ + 0.1f * (learnedValue - currentQ);</div>
+            <div class="line" id="l34">}</div>
+        </div>
+    </div>
+
+    <div class="panel memory-panel">
+        <div class="var-box" id="explanation-box" style="background: #063970; border: 1px solid #4fc1ff;">
+            Click "Start Execution" to begin a frame of Pong!
+        </div>
+
+        <div class="var-box">
+            <div class="var-row"><span>Epsilon (Exploration Rate)</span><span class="var-val">0.05 (5%)</span></div>
+            <br>
+            <div class="var-row"><span>Current State ID</span><span class="var-val" id="v-state">?</span></div>
+            <div class="var-row"><span>Chosen Action</span><span class="var-val" id="v-action">?</span></div>
+            <div class="var-row"><span>Next State ID</span><span class="var-val" id="v-next">?</span></div>
+            <div class="var-row"><span>Reward</span><span class="var-val" id="v-reward">?</span></div>
+        </div>
+
+        <h3>Q-Table</h3>
+        <table>
+            <thead><tr><th>State ID</th><th>Act 0 (Up)</th><th>Act 1 (Down)</th><th>Act 2 (Stay)</th></tr></thead>
+            <tbody>
+                <tr id="row-210"><td>210</td><td id="t-210-0">12.0</td><td id="t-210-1">-4.0</td><td id="t-210-2">2.5</td></tr>
+                <tr id="row-211"><td>211</td><td id="t-211-0">0.0</td><td id="t-211-1">20.0</td><td id="t-211-2">5.0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let step = 0;
+        const steps = [
+            // GET STATE
+            { line: 'l0', text: "Frame starts! We need to ask the bot what to do. First, we get the current state of the board." },
+            { line: 'l1', text: "Ball X is at 750px. 750 / 300px chunks = Bin 2." },
+            { line: 'l2', text: "Ball Y is at 400px. 400 / 100px chunks = Bin 4." },
+            { line: 'l3', text: "Paddle Y is at 600px. 600 / 100px chunks = Bin 6." },
+            { line: 'l4', text: "We combine them: 2 + (4*4) + (6*32) = 210. Our State ID is 210!", action: () => { document.getElementById('v-state').innerText = '210'; } },
+            
+            // CHOOSE ACTION
+            { line: 'l7', text: "Now we pass State 210 to the brain to choose an action." },
+            { line: 'l8', text: "We roll a random number to decide if we should explore. Let's say we roll 0.82." },
+            { line: 'l9', text: "0.82 is NOT less than epsilon (0.05). The bot decides to EXPLOIT its memory!" },
+            { line: 'l13', text: "We check the Q-Table for State 210. The Q-value for Action 0 (Up) is 12.0.", action: () => { document.getElementById('row-210').style.backgroundColor = '#333'; } },
+            { line: 'l15', text: "We loop through Action 1 and 2 to find the highest value." },
+            { line: 'l16', text: "Action 1 is -4.0 (worse). Action 2 is 2.5 (worse). So Action 0 (12.0) wins!" },
+            { line: 'l20', text: "The bot chooses Action 0 (Move UP)!", action: () => { document.getElementById('v-action').innerText = '0 (Up)'; } },
+            
+            // PHYSICS
+            { line: 'l23', text: "The game engine physically moves the paddle UP and moves the ball..." },
+            { line: 'l24', text: "COLLISION DETECTED! The paddle hit the ball! We get a Reward of +100! The board changes to a new state (let's say 211).", action: () => { document.getElementById('v-reward').innerText = '+100'; document.getElementById('v-next').innerText = '211'; document.getElementById('row-210').style.backgroundColor = ''; } },
+
+            // UPDATE MEMORY
+            { line: 'l25', text: "Now we call the Bellman Equation to learn from what just happened." },
+            { line: 'l26', text: "First, we look at where we ended up (State 211). We check the Q-value for Action 0." },
+            { line: 'l27', text: "We loop through State 211 to find the best possible future move." },
+            { line: 'l28', text: "In State 211, Action 1 has a Q-value of 20.0. This is the highest future value!", action: () => { document.getElementById('row-211').style.backgroundColor = '#333'; document.getElementById('t-211-1').classList.add('highlight-cell'); } },
+            { line: 'l31', text: "We get our old memory for what we actually did: State 210, Action 0 (12.0)." },
+            { line: 'l32', text: "We calculate the TRUE value: 100 (reward) + 0.9 * 20.0 (future) = 118.0!" },
+            { line: 'l33', text: "We blend the old memory (12.0) with the new truth (118.0) using learningRate (0.1).<br>12.0 + 0.1 * (118.0 - 12.0) = 22.6!", 
+              action: () => { 
+                document.getElementById('t-210-0').innerText = '22.6';
+                document.getElementById('t-210-0').style.backgroundColor = '#d32f2f';
+                setTimeout(() => { document.getElementById('t-210-0').style.backgroundColor = '#1e4620'; }, 500);
+              } 
+            },
+            { line: 'l34', text: "Frame complete! The bot just got significantly smarter at State 210.", action: () => { document.getElementById('stepBtn').innerText = "Finished"; document.getElementById('stepBtn').disabled = true; } }
+        ];
+
+        function nextStep() {
+            if (step >= steps.length) return;
+            document.querySelectorAll('.line').forEach(el => el.classList.remove('active-line'));
+            const currentObj = steps[step];
+            document.getElementById(currentObj.line).classList.add('active-line');
+            document.getElementById('explanation-box').innerHTML = currentObj.text;
+            if(currentObj.action) currentObj.action();
+            document.getElementById('stepBtn').innerText = "Step Forward (" + (step+1) + "/" + steps.length + ")";
+            step++;
+        }
+        function reset() { location.reload(); }
+    </script>
+</body>
+</html>

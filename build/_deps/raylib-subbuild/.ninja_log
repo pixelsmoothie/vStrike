@@ -1,0 +1,21 @@
+# ninja log v6
+1	66	8084794331033959	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-mkdir	d16fe101fa2ae398
+1	66	8084794331033959	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-mkdir	d16fe101fa2ae398
+1	3659	8084794464487597	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-download	7820c412b9833680
+1	3659	8084794464487597	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-download	7820c412b9833680
+3659	3717	8084794465067602	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-update	ffd4560c76ccd33d
+3659	3717	8084794465067602	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-update	ffd4560c76ccd33d
+3717	3770	8084794465607600	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-patch	3b0547d6eff23fd1
+3717	3770	8084794465607600	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-patch	3b0547d6eff23fd1
+3770	3823	8084794466137612	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-configure	1693322531f9b1b5
+3770	3823	8084794466137612	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-configure	1693322531f9b1b5
+3823	3882	8084794466717603	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-build	ddbdc77395c75bd4
+3823	3882	8084794466717603	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-build	ddbdc77395c75bd4
+3882	3962	8084794467527604	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-install	a6f2d4a7bb2abf59
+3882	3962	8084794467527604	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-install	a6f2d4a7bb2abf59
+3962	4021	8084794468107598	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-test	32a52f9d2ab33063
+3962	4021	8084794468107598	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-test	32a52f9d2ab33063
+4021	4100	8084794468907606	CMakeFiles/raylib-populate-complete	140a608dd4bd1d09
+4021	4100	8084794468907606	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-done	140a608dd4bd1d09
+4021	4100	8084794468907606	D:/iso-space/vStrike/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate-complete	140a608dd4bd1d09
+4021	4100	8084794468907606	D:/iso-space/vStrike/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-done	140a608dd4bd1d09
