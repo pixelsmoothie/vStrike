@@ -20,7 +20,7 @@ public:
     {
         int currState = brain.getStateID(ball, paddle2);
 
-        int action = brain.choseAction(currState);
+        int action = brain.chooseAction(currState);
 
         if (action == 0) paddle2.y -= paddle2.speed * dt;
         else if (action == 1) paddle2.y += paddle2.speed * dt;

@@ -5,7 +5,6 @@
 #ifndef PONGARENA_QBRAIN_H
 #define PONGARENA_QBRAIN_H
 
-#include <iosfwd>
 #include <unordered_map>
 #include <vector>
 #include <fstream>
@@ -53,7 +52,7 @@ public:
         return stateID;
     }
 
-    int choseAction(int stateID)
+    int chooseAction(int stateID)
     {
         float rand = GetRandomValue(0, 100.0f) / 100.0f;
 
@@ -100,11 +99,6 @@ public:
         float learnedValue = reward + discountFactor * maxFutureQ;
 
         qTable[stateID][action] = currentQ + learningRate * (learnedValue - currentQ);
-
-        // Epsilon decay moved to logEpisode() so it decays per-episode, not per-frame
-        // This gives the bot time to explore the full 512-state space
-        if (false) { // DISABLED HERE
-        }
 
         episodeReward += reward;
     }
