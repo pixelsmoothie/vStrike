@@ -1,0 +1,20 @@
+flowchart TD
+    REWARD["4. Continuous Reward Function<br/>(Distance Penalty -dist * 0.1 + Hit/Miss ±100)"]
+
+    DISC["1. Spatial Discretizer<br/>(Maps continuous coords into 512-State Grid)"]
+    LEARN["5. Bellman Equation Update & Q-Table Memory<br/>Q(s, a) += α [ R + γ max Q(s', a') - Q(s, a) ]"]
+
+    POLICY["2. ε-Greedy Decision Policy<br/>(Explore Random 1.0 → Exploit Max Q 0.005)"]
+    ACT["3. Execute Action {UP, DOWN, STAY}<br/>(Paddle moves towards ball: y += speed * dt)"]
+
+    DISC -->|State ID| POLICY
+    POLICY -->|Chosen Action| ACT
+    ACT -->|Resulting Position| REWARD
+    REWARD -->|Reward Signal| LEARN
+    LEARN -.->|Feeds Updated Q-Values| POLICY
+
+    style DISC fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style POLICY fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style ACT fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style REWARD fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style LEARN fill:#161B22,stroke:#BC8CFF,stroke-width:2px,color:#FFFFFF

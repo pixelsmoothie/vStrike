@@ -16,78 +16,22 @@ A 2D Action-RPG Battle Pong game developed in C++17 with Raylib, featuring comba
 
 ## Game Overview & Features
 
-```mermaid
-flowchart TD
-    LAUNCH["1. App Launch & Window Init<br/>(main.cpp)"]
-    MENU["2. Main Menu Screen<br/>(MenuScreen)"]
-    
-    SETTINGS["Settings Screen<br/>(SettingsScreen)"]
-    MODES["3. Mode Selection Carousel<br/>(ModeSelection)"]
-    
-    LOCAL["LocalView<br/>(1v1 PvP Match)"]
-    AIVIEW["AIView<br/>(Q-Learning Bot Match)"]
-    
-    PAUSE["4. In-Game Pause & Exit Overlay<br/>(SettingsOV)"]
+- **Combat Pong Mechanics:** Health-based scoring system, velocity multipliers, and dynamic collision response.
+- **Game Modes:** Local 1v1 multiplayer and VS AI battle modes.
+- **UI & State Management:** Custom screen state machine (`GameScreen`, `GameStates`) with smooth scene transitions.
+- **Adaptive Reinforcement Learning AI:** An opponent agent trained via Q-Learning that learns trajectory prediction, positioning, and rally defense through self-play.
 
-    LAUNCH --> MENU
-    
-    MENU -->|Click 'SETTINGS'| SETTINGS
-    MENU -->|Click 'START'| MODES
-    
-    MODES -->|Select 'LOCAL 1v1'| LOCAL
-    MODES -->|Select 'R-BOT'| AIVIEW
-    
-    LOCAL -->|Press SPACE| PAUSE
-    AIVIEW -->|Press SPACE| PAUSE
+### Screen Navigation & State Flow
+![Screen Navigation Flow](assets/screen_flow.png)
 
-    style LAUNCH fill:#1e1e1e,stroke:#6e7681,stroke-width:1.5px,color:#ffffff
-    style MENU fill:#1e1e1e,stroke:#6e7681,stroke-width:1.5px,color:#ffffff
-    style SETTINGS fill:#1e1e1e,stroke:#6e7681,stroke-width:1.5px,color:#ffffff
-    style MODES fill:#1e1e1e,stroke:#6e7681,stroke-width:1.5px,color:#ffffff
-    style LOCAL fill:#1e1e1e,stroke:#6e7681,stroke-width:1.5px,color:#ffffff
-    style AIVIEW fill:#1e1e1e,stroke:#6e7681,stroke-width:1.5px,color:#ffffff
-    style PAUSE fill:#1e1e1e,stroke:#6e7681,stroke-width:1.5px,color:#ffffff
-```
-
-## Game Overview & Features
-
-- **Combat Pong Mechanics:** Health-based scoring system...
+---
 
 ## AI Architecture (Tabular Q-Learning)
 
 The AI opponent is implemented from scratch in pure C++ without external machine learning dependencies, using an `std::unordered_map` Q-Table.
 
-### Screen Navigation & State Machine
-
-### Reinforcement Learning Closed Loop
-
-```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true, 'background': '#1E1E1E', 'mainBkg': '#252526', 'lineColor': '#8B949E', 'fontFamily': 'ui-monospace, monospace'}}}%%
-
-flowchart TD
-    DISC["1. Spatial Discretizer\n(Maps continuous coordinates into 512-State Grid)"]
-    POLICY["2. ε-Greedy Decision Policy\n(Explore Random 1.0 → Exploit Max Q 0.005)"]
-
-    ACT["3. Execute Action {UP, DOWN, STAY}\n(Paddle moves towards ball: y += speed * dt)"]
-    REWARD["4. Continuous Reward Function\n(Distance Penalty -dist * 0.1  +  Hit/Miss ±100)"]
-
-    LEARN["5. Bellman Equation Update & Q-Table Memory\nQ(s, a) += α [ R + γ max Q(s', a') - Q(s, a) ] stored in std::unordered_map"]
-
-    DISC ==>|"State ID (s)"| POLICY
-    POLICY ==>|"Chosen Action (a)"| ACT
-    
-    ACT ==>|"Resulting Position"| REWARD
-    REWARD ==>|"Reward Signal (R)"| LEARN
-    
-    LEARN -.->|"Feeds Updated Q-Values for next frame"| POLICY
-
-    classDef default fill:#1E1E1E,stroke:#4A4A4A,stroke-width:1.5px,color:#E6EDF3;
-    classDef stepNode fill:#252526,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF;
-    classDef memoryNode fill:#1B1724,stroke:#BC8CFF,stroke-width:1.5px,color:#E2C5FF;
-
-    class DISC,POLICY,ACT,REWARD stepNode;
-    class LEARN memoryNode;
-```
+### Q-Learning Closed Loop
+![Q-Learning Decision Loop](assets/rl_loop.png)
 
 ### 1. State Space Discretization (512 States)
 To avoid the continuous state-space explosion on an 800x1000 resolution, the continuous coordinate space is discretized into 512 discrete states:

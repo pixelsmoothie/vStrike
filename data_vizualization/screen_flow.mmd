@@ -1,0 +1,30 @@
+flowchart TD
+    LAUNCH["1. App Launch & Window Init<br/>(main.cpp)"]
+    MENU["2. Main Menu Screen<br/>(MenuScreen)"]
+    
+    SETTINGS["Settings Screen<br/>(SettingsScreen)"]
+    MODES["3. Mode Selection Carousel<br/>(ModeSelection)"]
+    
+    LOCAL["LocalView<br/>(1v1 PvP Match)"]
+    AIVIEW["AIView<br/>(Q-Learning Bot Match)"]
+    
+    PAUSE["4. In-Game Pause & Exit Overlay<br/>(SettingsOV)"]
+
+    LAUNCH --> MENU
+    
+    MENU -->|Click 'SETTINGS'| SETTINGS
+    MENU -->|Click 'START'| MODES
+    
+    MODES -->|Select 'LOCAL 1v1'| LOCAL
+    MODES -->|Select 'R-BOT'| AIVIEW
+    
+    LOCAL -->|Press SPACE| PAUSE
+    AIVIEW -->|Press SPACE| PAUSE
+
+    style LAUNCH fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style MENU fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style SETTINGS fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style MODES fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style LOCAL fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style AIVIEW fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
+    style PAUSE fill:#161B22,stroke:#6E7681,stroke-width:1.5px,color:#FFFFFF
