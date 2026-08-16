@@ -10,12 +10,12 @@
 class SettingsScreen : public GameScreen
 {
 private:
-    int H = HEIGHT / 2;
-    int W = WIDTH / 2;
+    float H = HEIGHT / 2.0f;
+    float W = WIDTH / 2.0f;
 
     Texture2D settingsBG;
 
-    Rectangle backButton = {W - 120, H + 60, 240, 60};
+    Rectangle backButton = {W - 120.0f, H + 60.0f, 240.0f, 60.0f};
     bool isPressed = false;
 public:
     SettingsScreen()

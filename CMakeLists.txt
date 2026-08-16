@@ -50,3 +50,13 @@ target_link_libraries(PongArena PRIVATE raylib)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/UI/BG DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+if(EMSCRIPTEN)
+    set_target_properties(PongArena PROPERTIES OUTPUT_NAME "index")
+    set_target_properties(PongArena PROPERTIES SUFFIX ".html")
+    target_link_options(PongArena PRIVATE
+        "-sUSE_GLFW=3"
+        "-sALLOW_MEMORY_GROWTH=1"
+        "--preload-file" "${CMAKE_CURRENT_SOURCE_DIR}/assets@assets"
+        "--shell-file" "${CMAKE_CURRENT_SOURCE_DIR}/shell.html"
+    )
+endif()

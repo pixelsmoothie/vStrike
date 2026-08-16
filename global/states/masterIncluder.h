@@ -10,5 +10,5 @@
 #include "modeSelection.h"
 #include "settingScreen.h"
 #include "../../core/localView.h"
-#include "../../core/AIView.h"
+#include "../../core/aiView.h"
 #endif //PONGARENA_MASTERINCLUDER_H

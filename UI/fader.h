@@ -55,8 +55,6 @@ public:
         {
             alpha -= speed * dt;
 
-
-
             if (alpha <= 0.0f)
             {
                 alpha = 0.0f;
@@ -70,10 +68,11 @@ public:
     {
         if (state != FadeStates::STATE_NONE)
         {
-            unsigned alphaRate = static_cast<unsigned char>(alpha * 255.0f);
-            DrawRectangle(0, 0, WIDTH, HEIGHT, Color{0,0,0,  alphaRate});
+            unsigned char alphaRate = static_cast<unsigned char>(alpha * 255.0f);
+            DrawRectangle(0, 0, WIDTH, HEIGHT, Color{0, 0, 0, alphaRate});
         }
     }
+
     bool IsIdle() const
     {
         return state == FadeStates::STATE_NONE;

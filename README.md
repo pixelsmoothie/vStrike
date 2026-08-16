@@ -1,9 +1,14 @@
 # vStrike — Action-RPG Battle Pong with Reinforcement Learning AI
 
+[![Play Online](https://img.shields.io/badge/Play%20Online-WebAssembly%20Demo-orange.svg?style=for-the-badge&logo=webassembly&logoColor=white)](https://pixelsmoothie.github.io/vStrike/)
+
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B17)
+[![WebAssembly](https://img.shields.io/badge/WebAssembly-Emscripten-purple.svg)](https://webassembly.org/)
 [![Raylib](https://img.shields.io/badge/Rendered%20With-Raylib%205.0-red.svg)](https://www.raylib.com/)
 [![CMake](https://img.shields.io/badge/Build-CMake-brightgreen.svg)](https://cmake.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> **🎮 Live Browser Demo:** Play against the Q-Learning AI directly in your browser at **[pixelsmoothie.github.io/vStrike](https://pixelsmoothie.github.io/vStrike/)** (Cross-compiled from C++17 to WebAssembly via Emscripten).
 
 A 2D Action-RPG Battle Pong game developed in C++17 with Raylib, featuring combat mechanics, health pools, dynamic state navigation, and an adaptive AI opponent powered by a custom Tabular Q-Learning engine.
 

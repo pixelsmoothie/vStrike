@@ -84,7 +84,6 @@ public:
         return GameStates::STATE_AI_VIEW;
     }
 
-
     void Draw() override
     {
         GameView::Draw();
