@@ -22,26 +22,21 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
       .game-container {
-        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 95vw;
-        max-width: 1280px;
-        padding: 8px;
+        justify-content: center;
       }
       canvas.emscripten {
-        width: 100%;
+        display: block;
+        max-height: 88vh;
+        max-width: 96vw;
         height: auto;
-        aspect-ratio: 16 / 10;
-        max-height: 84vh;
-        object-fit: contain;
+        width: auto;
         border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 10px;
+        border-radius: 8px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(188, 140, 255, 0.08);
         outline: none;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
       }
       .footer-hint {
         margin-top: 10px;
