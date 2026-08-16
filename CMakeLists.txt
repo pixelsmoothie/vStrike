@@ -43,6 +43,7 @@ add_executable(PongArena main.cpp
         UI/fader.h
         global/customFont.h
         core/qBrain.h
+        core/settingsOverlay.h
 )
 target_link_libraries(PongArena PRIVATE raylib)
 
