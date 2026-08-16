@@ -28,10 +28,30 @@ public:
         if (paddle2.y < 40.0f) paddle2.y = 40.0f;
         if (paddle2.y + paddle2.height > HEIGHT) paddle2.y = HEIGHT - paddle2.height;
 
-        paddle1.Update(dt);
+        // --- TRAINING DUMMY (AFK Training - Nerfed to 60% speed) ---
+        float p1Center = paddle1.y + (paddle1.height / 2.0f);
+        if (ball.Cy < p1Center) paddle1.y -= paddle1.speed * 0.6f * dt;
+        if (ball.Cy > p1Center) paddle1.y += paddle1.speed * 0.6f * dt;
+        if (paddle1.y < 40.0f) paddle1.y = 40.0f;
+        if (paddle1.y + paddle1.height > HEIGHT) paddle1.y = HEIGHT - paddle1.height;
+        // paddle1.Update(dt); // Human input disabled
+        // -------------------------------------
+        
         ball.Update(dt);
         paddle2.color = VIOLET;
-        updatePhysics(dt);
+        
+        // 3. Episode Tracking (Did someone score?)
+        // MUST run before updatePhysics resets the ball!
+        if (ball.Cx > WIDTH)
+        {
+            brain.logEpisode(false);
+        }
+        else if (ball.Cx < 0)
+        {
+            brain.logEpisode(true);
+        }
+        
+        updatePhysics(dt); // Now it's safe to resolve collisions and reset!
 
         float reward = 0.0f;
         
@@ -39,18 +59,23 @@ public:
         if (ball.speedX < 0 && ball.Cx > WIDTH / 2) reward += 100.0f; // Hit!
         if (ball.Cx > WIDTH) reward -= 100.0f; // Missed!
 
-        // 2. Dense Rewards (Hot and Cold)
-        // Calculate how far the center of the paddle is from the ball
+        // 2. Dense Rewards (Negative Penalty for distance)
         float paddleCenterY = paddle2.y + (paddle2.height / 2.0f);
         float distance = std::abs(paddleCenterY - ball.Cy);
         
-        // Punish the bot every frame based on how far away it is
-        reward -= (distance * 0.05f); 
+        // Punish the bot every frame based on how far away it is!
+        reward -= (distance * 0.1f);
 
         int nextState = brain.getStateID(ball, paddle2);
         brain.updateQTable(currState, action, nextState, reward);
 
         return GameStates::STATE_AI_VIEW;
+    }
+
+
+    void Draw() override
+    {
+        GameView::Draw();
     }
 };
 #endif //PONGARENA_AIVIEW_H

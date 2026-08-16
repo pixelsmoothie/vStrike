@@ -5,8 +5,10 @@
 #ifndef PONGARENA_QBRAIN_H
 #define PONGARENA_QBRAIN_H
 
+#include <iosfwd>
 #include <unordered_map>
 #include <vector>
+#include <fstream>
 
 #include "../entities/ball.h"
 #include "../entities/paddle.h"
@@ -21,29 +23,33 @@ private:
     float epsilon = 1.0f;
     float discountFactor = 0.9f;
 
+    int currEpisode = 1;
+    float episodeReward = 0.0f;
+
 public:
-    QBrain()
-    {
-    };
+    std::vector<float> rewardHistory;
+
+    QBrain() {};
 
     int getStateID(const Ball& ball, const Paddle& paddle)
     {
         int stateID = 0;
 
-        // 1. Is the ball moving towards the AI (Right) or away (Left)?
-        int movingTowards = (ball.speedX > 0) ? 1 : 0;
-        
-        // 2. Where is the ball relative to the paddle's center?
-        float paddleCenter = paddle.y + (paddle.height / 2.0f);
-        int relativeY = 1; // Default: Aligned
-        
-        if (ball.Cy < paddleCenter - 20.0f) relativeY = 0;      // Ball is Above
-        else if (ball.Cy > paddleCenter + 20.0f) relativeY = 2; // Ball is Below
+        int ballX_cuts = static_cast<int>(ball.Cx / (WIDTH / 4.0f));
+        if (ballX_cuts > 3) ballX_cuts = 3;
 
-        // Combine into 6 possible states (2 * 3)
-        stateID = movingTowards;
-        stateID += relativeY * 2;
+        int ballY_cuts = static_cast<int>(ball.Cy / (HEIGHT / 8.0f));
+        if (ballY_cuts > 7) ballY_cuts = 7;
 
+        int paddleY_cuts = static_cast<int>(paddle.y / (HEIGHT / 8.0f));
+        if (paddleY_cuts > 7) paddleY_cuts = 7;
+
+        int dirX = (ball.speedX > 0) ? 1 : 0;
+
+        stateID += ballX_cuts;
+        stateID += ballY_cuts * (4);
+        stateID += paddleY_cuts * (4 * 8);
+        stateID += dirX * (4 * 8 * 8);
         return stateID;
     }
 
@@ -95,11 +101,36 @@ public:
 
         qTable[stateID][action] = currentQ + learningRate * (learnedValue - currentQ);
 
-        // Decay epsilon 10x faster so the bot grows up in 30 seconds
-        if (epsilon > 0.05f)
-        {
-            epsilon -= 0.0005f; 
+        // Epsilon decay moved to logEpisode() so it decays per-episode, not per-frame
+        // This gives the bot time to explore the full 512-state space
+        if (false) { // DISABLED HERE
         }
+
+        episodeReward += reward;
+    }
+
+    void logEpisode(bool aiWon)
+    {
+        std::ofstream file;
+        file.open("D:/iso-space/vStrike/metrics.csv", std::ios::app);
+
+        if (currEpisode == 1)
+        {
+            file << "Episode,AI_Won,Total_Reward,Epsilon\n";
+        }
+
+        file << currEpisode << "," << (aiWon ? 1 : 0) << "," << episodeReward << "," << epsilon << "\n";
+        file.close();
+
+        // Decay epsilon per-episode (not per-frame!)
+        if (epsilon > 0.01f)
+        {
+            epsilon -= 0.005f;  // ~200 episodes to fully train
+        }
+
+        rewardHistory.push_back(episodeReward);
+        currEpisode++;
+        episodeReward = 0.0f;
     }
 };
 

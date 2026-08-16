@@ -39,7 +39,7 @@ public:
     void updatePhysics(float dt){
         ResolveCollision(ball, paddle1, paddle2);
         CheckScoreAndReset(ball, paddle1, paddle2);
-        GameOutcomeAndRestart(ball, paddle1, paddle2, multiplier);
+        // GameOutcomeAndRestart(ball, paddle1, paddle2, multiplier); // Disabled for AFK Training
     }
 };
 
