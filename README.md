@@ -22,7 +22,9 @@ A 2D Action-RPG Battle Pong game developed in C++17 with Raylib, featuring comba
 - **Adaptive Reinforcement Learning AI:** An opponent agent trained via Q-Learning that learns trajectory prediction, positioning, and rally defense through self-play.
 
 ### Screen Navigation & State Flow
-![Screen Navigation Flow](assets/screen_flow.png)
+<p align="center">
+  <img src="assets/screen_flow.png" width="460" alt="Screen Navigation Flow" />
+</p>
 
 ---
 
@@ -31,7 +33,9 @@ A 2D Action-RPG Battle Pong game developed in C++17 with Raylib, featuring comba
 The AI opponent is implemented from scratch in pure C++ without external machine learning dependencies, using an `std::unordered_map` Q-Table.
 
 ### Q-Learning Closed Loop
-![Q-Learning Decision Loop](assets/rl_loop.png)
+<p align="center">
+  <img src="assets/rl_loop.png" width="520" alt="Q-Learning Decision Loop" />
+</p>
 
 ### 1. State Space Discretization (512 States)
 To avoid the continuous state-space explosion on an 800x1000 resolution, the continuous coordinate space is discretized into 512 discrete states:
