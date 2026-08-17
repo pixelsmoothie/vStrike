@@ -13,6 +13,7 @@
 #endif
 
 Font globalFont;
+Font gameNameFont;
 
 struct GameContext
 {
@@ -25,7 +26,7 @@ struct GameContext
 void UpdateFrame()
 {
     BeginDrawing();
-    ClearBackground(Color{20, 20, 20, 255});
+    ClearBackground(GAME_BG);
     float dt = GetFrameTime();
 
     bool triggerToSwap = gC.fader.Update(dt);
@@ -90,8 +91,14 @@ int main()
     //called here after initializing the window so the openGL texture could load
     gC.currentScreen = new MenuScreen();
 
-    globalFont = LoadFontEx("assets/BlockCraft.otf", 120, NULL, 0);
+    globalFont = LoadFontEx("assets/IBM_Plex_Mono/IBMPlexMono-Regular.ttf", 40, NULL, 0);
     SetTextureFilter(globalFont.texture, TEXTURE_FILTER_BILINEAR);
+
+    gameNameFont = LoadFontEx("assets/ElectroGarden.ttf", 200, NULL, 0);
+    if (IsFontReady(gameNameFont))
+    {
+        SetTextureFilter(gameNameFont.texture, TEXTURE_FILTER_BILINEAR);
+    }
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateFrame, 0, 1);

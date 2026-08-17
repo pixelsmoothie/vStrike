@@ -21,22 +21,40 @@ protected:
     float multiplier;
     float topPos = 60;
 
+    Texture2D gameBG;
+
 public:
-    GameView() : paddle1(10.0f, HEIGHT / 2 - 150.0f / 2, 30.0f, 150.0f, 400.0f, RAYWHITE, KEY_S, KEY_W, 100.0f, 100.0f),
-                 paddle2(WIDTH - 40.0f, HEIGHT / 2 - 150.0f / 2, 30.0f, 150.0f, 400.0f, RAYWHITE, KEY_DOWN, KEY_UP, 100.0f, 100.0f),
-                 ball(WIDTH / 2, HEIGHT / 2, 15.0f, 500.0f, 360.0f, RAYWHITE),
-                 multiplier(1.3f) {}
+    GameView() : paddle1(20.0f, HEIGHT / 2 - 150.0f / 2, 30.0f, 150.0f, 400.0f, VIOLET, KEY_S, KEY_W, 100.0f, 100.0f),
+                 paddle2(WIDTH - 50.0f, HEIGHT / 2 - 150.0f / 2, 30.0f, 150.0f, 400.0f, VIOLET, KEY_DOWN, KEY_UP, 100.0f, 100.0f),
+                 ball(WIDTH / 2, HEIGHT / 2, 15.0f, 500.0f, 360.0f, VIOLET),
+                 multiplier(1.3f)
+    {
+        gameBG = LoadTexture("assets/UI/BG/game_play_bg.png");
+    }
+
+    ~GameView()
+    {
+        UnloadTexture(gameBG);
+    }
 
     GameStates Update(float dt) override = 0;
 
+    void TopBar()
+    {
+        RenderHealthBars(paddle1, paddle2);
+        DrawTimer();
+        DrawCustomText("P1", 30.0f, 18.0f, 30.0f, RAYWHITE);
+        DrawCustomText("P2", WIDTH - 60.0f, 18.0f, 30.0f, RAYWHITE);
+    }
+
     void Draw() override {
+        DrawTexture(gameBG, 0, 0, WHITE);
         paddle1.Draw();
         paddle2.Draw();
         DrawLine(WIDTH / 2, topPos, WIDTH / 2, HEIGHT , GRAY);
         ball.Draw();
         DrawLine(0, topPos, WIDTH, topPos, RAYWHITE);
-        RenderHealthBars(paddle1, paddle2);
-        DrawTimer();
+        TopBar();
         GameOutcomeAndRestart(ball, paddle1, paddle2, multiplier);
     }
 

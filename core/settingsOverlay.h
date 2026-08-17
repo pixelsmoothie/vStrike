@@ -59,18 +59,22 @@ public:
 
         //BACKGROUND
         DrawRectangleGradientV(0, 0, WIDTH, HEIGHT, color1, color2);
-        DrawRectangleRounded(OverlayBG, 0.4f, 16, color2);
-        DrawRectangleRoundedLines(OverlayOutline, 0.4f, 16, 1.0f, BLACK);
+
+        DrawChamferedRectangleFilled(OverlayBG, 20.0f, GAME_BG);
+        DrawChamferedRectangleLines(OverlayOutline, 20.0f, 2.0f, RAYWHITE);
 
         //BUTTONS
-        DrawCustomText("RESUME", (WIDTH / 2) - 100, 255, 60, RAYWHITE);
-        DrawRectangleRoundedLines(Resume, 0.4f, 16, 2.0f,BLACK);
+        Vector2 textSizeResume = MeasureTextEx(globalFont,"RESUME", 40, 2.0f);
+        DrawCustomText("RESUME", (WIDTH - textSizeResume.x) / 2, 265, 40, RAYWHITE);
+        DrawChamferedRectangleLines(Resume, 10.0f, 2.0f, RAYWHITE);
 
-        DrawCustomText("SETTINGS", (WIDTH / 2) - 115, 360, 60, RAYWHITE);
-        DrawRectangleRoundedLines(Settings, 0.4f, 16, 2.0f, BLACK);
+        Vector2 textSizeSettings = MeasureTextEx(globalFont,"SETTINGS", 40, 2.0f);
+        DrawCustomText("SETTINGS", (WIDTH - textSizeSettings.x) / 2, 375, 40, RAYWHITE);
+        DrawChamferedRectangleLines(Settings, 10.0f, 2.0f, RAYWHITE);
 
-        DrawCustomText("EXIT", (WIDTH / 2) - 60, 480, 60, RAYWHITE);
-        DrawRectangleRoundedLines(Exit, 0.4f, 16, 2.0f, BLACK);
+        Vector2 textSizeExit = MeasureTextEx(globalFont,"EXIT", 40, 2.0f);
+        DrawCustomText("EXIT", (WIDTH - textSizeExit.x) / 2, 495, 40, RAYWHITE);
+        DrawChamferedRectangleLines(Exit, 10.0f, 2.0f, RAYWHITE);
     }
 };
 #endif //PONGARENA_SETTINGSOVERLAY_H

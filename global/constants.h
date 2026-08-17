@@ -8,5 +8,6 @@
 
 const float WIDTH = 1280;
 const float HEIGHT = 800;
+const Color GAME_BG = Color{20, 20, 20, 255};
 
 #endif //PONGARENA_GLOBAL_H

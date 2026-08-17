@@ -8,5 +8,4 @@
 
 void UpdateTimer(float dt);
 void DrawTimer();
-void ResetTimer();
 #endif //PONGARENA_GAMETIMER_H

@@ -5,6 +5,7 @@
 #include "../global/constants.h"
 #include <string>
 #include "../global/customFont.h"
+#include "../global/ShapeHelpers.h"
 
 static float topPos = 60;
 
@@ -20,14 +21,15 @@ void RenderHealthBars(Paddle& paddle1, Paddle& paddle2)
     rect1.height = 30;
     rect1.x = 80;
     rect1.y = (topPos - rect1.height) / 2;
-    DrawRectangleRounded(rect1, 0.4f, 8, GREEN);
+    DrawChamferedRectangleFilled(rect1, 5.0f, GREEN);
+
 
     Rectangle rect1Outline;
     rect1Outline.x = rect1.x;
-    rect1Outline.y = rect1.y;
     rect1Outline.width = 400;
-    rect1Outline.height = rect1.height;
-    DrawRectangleRoundedLines(rect1Outline, 0.4f, 8, 2, RAYWHITE);
+    rect1Outline.height = 30;
+    rect1Outline.y = (topPos - rect1Outline.height) / 2;
+    DrawChamferedRectangleLines(rect1Outline, 5.0f, 15.0f, RAYWHITE);
 
     DrawText(HP1.c_str(), (rect1.x + rect1Outline.width + 30), (topPos - rect1.height) / 2, 30, GREEN);
 
@@ -41,14 +43,14 @@ void RenderHealthBars(Paddle& paddle1, Paddle& paddle2)
     rect2.height = 30;
     rect2.x = WIDTH - 480;
     rect2.y = (topPos - rect2.height) / 2;
-    DrawRectangleRounded(rect2, 0.4f, 8, GREEN);
+    DrawChamferedRectangleFilled(rect2, 5.0f, GREEN);
 
     Rectangle rect2Outline;
     rect2Outline.x = rect2.x;
     rect2Outline.y = rect2.y;
     rect2Outline.width = 400;
     rect2Outline.height = rect2.height;
-    DrawRectangleRoundedLines(rect2Outline, 0.4f, 8, 2, RAYWHITE);
+    DrawChamferedRectangleLines(rect2Outline, 5.0f, 15.0f, RAYWHITE);
 
     DrawText(HP2.c_str(), (rect2.x - 70), (topPos - rect2.height) / 2, 30, GREEN);
 }

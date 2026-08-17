@@ -6,6 +6,7 @@
 #define PONGARENA_SETTINGSCREEN_H
 #include "gameScreen.h"
 #include "../constants.h"
+#include "../ShapeHelpers.h"
 
 class SettingsScreen : public GameScreen
 {
@@ -15,12 +16,15 @@ private:
 
     Texture2D settingsBG;
 
-    Rectangle backButton = {W - 120.0f, H + 60.0f, 240.0f, 60.0f};
+    Color btnBackOutline = RAYWHITE;
+    Color textColorBack = RAYWHITE;
+
+    Rectangle backButton = {(WIDTH - 340) / 2, H + 60.0f, 340, 70};
     bool isPressed = false;
 public:
     SettingsScreen()
     {
-        settingsBG = LoadTexture("assets/UI/BG/menu_bg.png");
+        settingsBG = LoadTexture("assets/UI/BG/main_menu_bg.png");
     }
 
     ~SettingsScreen()
@@ -36,6 +40,8 @@ public:
         {
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
+                btnBackOutline = VIOLET;
+                textColorBack  = VIOLET;
                 return GameStates::STATE_MENU;
             }
         }
@@ -46,9 +52,10 @@ public:
     {
         DrawTexture(settingsBG, 0, 0, WHITE);
 
-        DrawRectangleRoundedLines(backButton, 0.4f, 16, 2.0f, RAYWHITE);
-        const int textSizeSettings = MeasureText("SETTINGS", 45);
-        DrawCustomText("BACK", (WIDTH + 47 - textSizeSettings) / 2, (HEIGHT / 2) + 68, 45, RAYWHITE);
+        DrawChamferedRectangleFilled(backButton, 10.0f, BLACK);
+        DrawChamferedRectangleLines(backButton, 10.0f, 2.0f, btnBackOutline);
+        Vector2 textSizeBack = MeasureTextEx(globalFont,"BACK", 40, 2.0f);
+        DrawCustomText("BACK", (WIDTH - textSizeBack.x) / 2, H + 75, 40, textColorBack);
     }
 };
 #endif //PONGARENA_SETTINGSCREEN_H

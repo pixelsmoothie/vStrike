@@ -46,11 +46,16 @@ add_executable(PongArena main.cpp
         core/settingsOverlay.h
         UI/GameTimer.cpp
         UI/GameTimer.h
+        global/ShapeHelpers.h
 )
 target_link_libraries(PongArena PRIVATE raylib)
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/UI/BG DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+# Automatically copy all assets to the build/executable directory on every single build
+add_custom_command(TARGET PongArena POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+    $<TARGET_FILE_DIR:PongArena>/assets
+)
 
 if(EMSCRIPTEN)
     set_target_properties(PongArena PROPERTIES OUTPUT_NAME "index")

@@ -10,10 +10,6 @@
 static float topPos = 60.0f;
 float GameTime = 90.0f;
 
-void ResetTimer()
-{
-
-}
 void UpdateTimer(float dt)
 {
     if (GameTime >= 0)

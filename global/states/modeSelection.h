@@ -6,6 +6,7 @@
 #define PONGARENA_MODESELECTION_H
 #include "gameScreen.h"
 #include "raylib.h"
+#include "../ShapeHelpers.h"
 
 class ModeSelection : public GameScreen
 {
@@ -16,7 +17,11 @@ private:
     Texture2D modeBG, Local, Multiplayer, AI;
     Texture2D L, R;
 
-    Rectangle Trigger = {W - 130, H + 165, 260, 60};
+    Color btnBack = BLACK;
+    Color btnOutline = RAYWHITE;
+    Color textColor = RAYWHITE;
+
+    Rectangle Trigger = {(WIDTH - 340) / 2, H + 165, 340, 70};
     Rectangle LeftNav = {100, H - 65, 150, 150};
     Rectangle RightNav = {WIDTH - 220, H - 65, 150, 150};
 
@@ -26,7 +31,7 @@ public:
 
     ModeSelection()
     {
-        modeBG = LoadTexture("assets/UI/BG/menu_bg.png");
+        modeBG = LoadTexture("assets/UI/BG/main_menu_bg.png");
         Local = LoadTexture("assets/UI/Modes/icon_local_1v1@2x.png");
         Multiplayer = LoadTexture("assets/UI/Modes/icon_multiplayer@2x.png");
         AI = LoadTexture("assets/UI/Modes/icon_vs_bot@2x.png");
@@ -80,6 +85,8 @@ public:
         {
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
+                btnOutline = VIOLET;
+                textColor = VIOLET;
                 if (selectedState == 0) return GameStates::STATE_LOCAL_VIEW;
                 if (selectedState == 1) return GameStates::STATE_AI_VIEW;
             }
@@ -100,22 +107,26 @@ public:
         DrawTexture(L, 100, H - 65, WHITE);
         DrawTexture(R, WIDTH - 220, H - 65, WHITE);
 
-        DrawRectangleRoundedLines(Trigger, 0.4f, 16, 1.0f, RAYWHITE);
+        DrawChamferedRectangleFilled(Trigger, 10.0f, btnBack);
+        DrawChamferedRectangleLines(Trigger, 10.0f, 2.0f, btnOutline);
 
         if (selectedState == 0)
         {
             DrawTexture(Local, W - 128 , H - 128, WHITE);
-            DrawCustomText("LOCAL 1v1", W - 108, H + 170, 50, RAYWHITE);
+            Vector2 localSize = MeasureTextEx(globalFont, "LOCAL 1v1", 40, 2.0f);
+            DrawCustomText("LOCAL 1v1", (WIDTH - localSize.x) / 2, H + 180, 40, textColor);
         }
         else if (selectedState == 1)
         {
             DrawTexture(AI, W - 128, H - 128, WHITE);
-            DrawCustomText("R-BOT", W - 68, H + 170, 50, RAYWHITE);
+            Vector2 botSize = MeasureTextEx(globalFont, "R-BOT", 40, 2.0f);
+            DrawCustomText("R-BOT", (WIDTH - botSize.x) / 2, H + 180, 40, textColor);
         }
         else if (selectedState == 2)
         {
             DrawTexture(Multiplayer, W - 128, H - 128, WHITE);
-            DrawCustomText("ONLINE", W - 78, H + 170, 50, RAYWHITE);
+            Vector2 onlineSize = MeasureTextEx(globalFont, "MULTIPLAYER", 40, 2.0f);
+            DrawCustomText("MULTIPLAYER", (WIDTH - onlineSize.x) / 2, H + 180, 40, textColor);
         }
     }
 };

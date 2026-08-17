@@ -8,6 +8,8 @@
 #include "gameScreen.h"
 #include "raylib.h"
 #include "../customFont.h"
+#include "../ShapeHelpers.h"
+#include "../constants.h"
 
 class MenuScreen : public GameScreen
 {
@@ -16,14 +18,20 @@ private:
     float H = HEIGHT / 2;
 
     Texture2D BG;
+    
+    Color btnBack = BLACK;
+    Color btnOutlineStart = RAYWHITE;
+    Color btnOutlineSettings = RAYWHITE;
+    Color textColorStart = RAYWHITE;
+    Color textColorSettings = RAYWHITE;
 
-    Rectangle startButton = {W - 120, H - 30, 240, 60};
-    Rectangle settingsButton = {W - 120, H + 60, 240, 60};
+    Rectangle startButton = {(WIDTH - 340) / 2, H - 10, 340, 70};
+    Rectangle settingsButton = {(WIDTH - 340) / 2, H + 80, 340, 70};
     bool isPressed = false;
 public:
     MenuScreen()
     {
-        BG = LoadTexture("assets/UI/BG/menu_bg.png");
+        BG = LoadTexture("assets/UI/BG/main_menu_bg.png");
     }
 
     ~MenuScreen()
@@ -39,6 +47,8 @@ public:
         {
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
+                btnOutlineSettings = VIOLET;
+                textColorSettings = VIOLET;
                 return GameStates::STATE_SETTINGS;
             }
         }
@@ -46,6 +56,8 @@ public:
         {
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
+                btnOutlineStart = VIOLET;
+                textColorStart = VIOLET;
                 return GameStates::STATE_MODE_SELECTION;
             }
         }
@@ -58,17 +70,23 @@ public:
         DrawTexture(BG, 0, 0, WHITE);
 
         // Large, clean white title
-        DrawCustomText("vstrike", W - 120, 220, 70, RAYWHITE);
+        DrawGameName("vstrike", W - 190, 150, 200, RAYWHITE);
 
         // START BUTTON
-        DrawRectangleRoundedLines(startButton, 0.4f, 16, 2.0f, RAYWHITE);
-        const int textSizeStart = MeasureText("START", 45);
-        DrawCustomText("START", (WIDTH + 35 - textSizeStart) / 2, H - 24, 45, RAYWHITE);
+        DrawChamferedRectangleFilled(startButton, 10.0f, BLACK);
+        DrawChamferedRectangleLines(startButton, 10.0f, 4.0f, btnOutlineStart);
+        Vector2 textSizeStart = MeasureTextEx(globalFont,"START", 40, 2.0f);
+        DrawCustomText("START", (WIDTH - textSizeStart.x) / 2, H + 4, 40, textColorStart);
 
         // SETTINGS BUTTON
-        DrawRectangleRoundedLines(settingsButton, 0.4f, 16, 2.0f, RAYWHITE);
-        const int textSizeSettings = MeasureText("SETTINGS", 45);
-        DrawCustomText("SETTINGS", (WIDTH + 47 - textSizeSettings) / 2, H + 68, 45, RAYWHITE);
+        DrawChamferedRectangleFilled(settingsButton, 10.0f, BLACK);
+        DrawChamferedRectangleLines(settingsButton, 10.0f, 4.0f, btnOutlineSettings);
+        Vector2 textSizeSettings = MeasureTextEx(globalFont,"SETTINGS", 40, 2.0f);
+        DrawCustomText("SETTINGS", (WIDTH - textSizeSettings.x) / 2, H + 95, 40, textColorSettings);
+
+        //debug
+        //DrawLine(0, H, WIDTH, H, WHITE);
+        //DrawLine(W, 0, W, HEIGHT, WHITE);
     }
 };
 #endif //PONGARENA_MENUSCREEN_H
