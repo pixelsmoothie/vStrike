@@ -40,15 +40,7 @@ public:
             if (paddle2.y < 40.0f) paddle2.y = 40.0f;
             if (paddle2.y + paddle2.height > HEIGHT) paddle2.y = HEIGHT - paddle2.height;
 
-            // --- TRAINING DUMMY (AFK Training - Nerfed to 60% speed) ---
-            float p1Center = paddle1.y + (paddle1.height / 2.0f);
-            if (ball.Cy < p1Center) paddle1.y -= paddle1.speed * 0.6f * dt;
-            if (ball.Cy > p1Center) paddle1.y += paddle1.speed * 0.6f * dt;
-            if (paddle1.y < 40.0f) paddle1.y = 40.0f;
-            if (paddle1.y + paddle1.height > HEIGHT) paddle1.y = HEIGHT - paddle1.height;
-            // paddle1.Update(dt); // Human input disabled
-            // -------------------------------------
-
+            paddle1.Update(dt);
             ball.Update(dt);
             paddle2.color = VIOLET;
 

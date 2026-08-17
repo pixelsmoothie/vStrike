@@ -44,6 +44,8 @@ add_executable(PongArena main.cpp
         global/customFont.h
         core/qBrain.h
         core/settingsOverlay.h
+        UI/GameTimer.cpp
+        UI/GameTimer.h
 )
 target_link_libraries(PongArena PRIVATE raylib)
 

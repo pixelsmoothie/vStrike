@@ -4,7 +4,7 @@
 #include "physicsEngine.h"
 #include "../global/constants.h"
 #include "../global/customFont.h"
-
+#include "../UI/GameTimer.h"
 
 void ResolveCollision(Ball& ball, Paddle& paddle1, Paddle& paddle2)
 {
@@ -44,9 +44,11 @@ void CheckScoreAndReset(Ball& ball, Paddle& paddle1, Paddle& paddle2)
     }
 }
 
+extern float GameTime;
+
 void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& multiplier)
 {
-    if (paddle1.hp == 0 || paddle2.hp == 0)
+    if (paddle1.hp == 0 || paddle2.hp == 0 || GameTime <= 0)
     {
         DrawRectangle(0, 0, WIDTH, HEIGHT, Fade(BLACK, 0.6f));
         ball.speedX = 0;
@@ -60,13 +62,13 @@ void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& 
             DrawCustomText("Player 2 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
         }else
         {
-            int textWidth = MeasureText("Player 2 Wins", 60);
+            int textWidth = MeasureText("Player 1 Wins", 60);
             DrawCustomText("Player 1 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
         }
 
         // Draw restart text below the winner text instead of above it
-        int textWidth = MeasureText("Player 2 Wins", 60);
-        DrawCustomText("Press [R] to restart", (WIDTH - textWidth) / 2, 450, 50, RED);
+        Vector2 textWidth = MeasureTextEx(globalFont, "Press [R] to restart", 60, 2);
+        DrawCustomText("Press [R] to restart", (WIDTH - textWidth.x) / 2, 450, 60, RED);
 
         if (IsKeyPressed(KEY_R))
         {
@@ -75,6 +77,7 @@ void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& 
             ball.speedX += 300 * multiplier;
             ball.speedY += 280 * multiplier;
             multiplier += 0.4f;
+            GameTime = 90.0f;
         }
     }
 }

@@ -20,14 +20,14 @@ void Paddle :: Update(float deltaTime)
 {
     if (IsKeyDown(upKey))
     {
-        y -= (speed * deltaTime);
-        if (y < 40)
+        y -= (speed * deltaTime);                   //top boundary
+        if (y < 60)
         {
-             y = 40;
+             y = 60;
         }
     }
 
-    if (IsKeyDown(downKey))
+    if (IsKeyDown(downKey))                        //bottom boundary
     {
         y += (speed * deltaTime);
         if (y + height > HEIGHT)
