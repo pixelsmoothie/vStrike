@@ -70,7 +70,10 @@ public:
         DrawTexture(BG, 0, 0, WHITE);
 
         // Large, clean white title
-        DrawGameName("vstrike", W - 190, 150, 200, RAYWHITE);
+        Vector2 gameTitleSize = MeasureTextEx(gameNameFont, "Strike", 200, 2.0f);
+        DrawGameName("Strike", (WIDTH + 40 - gameTitleSize.x) / 2, 150, 200, RAYWHITE);
+
+        DrawGameName("v", (WIDTH - 60 - gameTitleSize.x) / 2, 150, 200, VIOLET);
 
         // START BUTTON
         DrawChamferedRectangleFilled(startButton, 10.0f, BLACK);
