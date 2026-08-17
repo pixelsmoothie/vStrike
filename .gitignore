@@ -1,7 +1,11 @@
-cmake-build-debug/
+cmake-build-*/
 build/
 build-web/
 .idea/
+.junie/
 *.exe
 *.o
 *.a
+__pycache__/
+*.pyc
+.DS_Store

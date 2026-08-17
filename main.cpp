@@ -2,10 +2,10 @@
 #include "global/constants.h"
 #include "entities/paddle.h"
 #include "entities/ball.h"
-#include "UI/HealthBar.h"
+#include "UI/healthBar.h"
 #include "physics/physicsEngine.h"
 #include "global/states/masterIncluder.h"
-#include "UI/Fader.h"
+#include "UI/fader.h"
 #include "global/customFont.h"
 
 #if defined(PLATFORM_WEB)
