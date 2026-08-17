@@ -46,16 +46,51 @@ void CheckScoreAndReset(Ball& ball, Paddle& paddle1, Paddle& paddle2)
 
 extern float GameTime;
 
+void StopAll(Ball& ball)
+{
+    DrawRectangle(0, 0, WIDTH, HEIGHT, Fade(BLACK, 0.6f));
+    ball.speedX = 0;
+    ball.speedY = 0;
+    ball.Cx = WIDTH/2;
+    ball.Cy = HEIGHT/2;
+}
+
+void ResetAll(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& multiplier)
+{
+    paddle1.hp = 100.0f;
+    paddle2.hp = 100.0f;
+    ball.speedX += 300 * multiplier;
+    ball.speedY += 280 * multiplier;
+    multiplier += 0.4f;
+    GameTime = 90.0f;
+}
+
+bool flag = true;
+
 void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& multiplier)
 {
-    if (paddle1.hp == 0 || paddle2.hp == 0 || GameTime <= 0)
+    if (GameTime <= 0)
     {
-        DrawRectangle(0, 0, WIDTH, HEIGHT, Fade(BLACK, 0.6f));
-        ball.speedX = 0;
-        ball.speedY = 0;
-        ball.Cx = WIDTH/2;
-        ball.Cy = HEIGHT/2;
-        
+        flag = false;
+
+        StopAll(ball);
+
+        int warningWidth = MeasureText("Time's UP!!", 60);
+        DrawCustomText("Time's UP!!", (WIDTH - warningWidth) / 2, 350, 60, WHITE);
+
+        Vector2 RestartWidth = MeasureTextEx(globalFont, "Press [R] to restart", 60, 2);
+        DrawCustomText("Press [R] to restart", (WIDTH - RestartWidth.x) / 2, 450, 60, RED);
+
+        if (IsKeyPressed(KEY_R))
+        {
+            ResetAll(ball, paddle1, paddle2, multiplier);
+        }
+    }
+
+    if (paddle1.hp == 0 || paddle2.hp == 0 && flag)
+    {
+        StopAll(ball);
+
         if (paddle1.hp == 0)
         {
             int textWidth = MeasureText("Player 2 Wins", 60);
@@ -67,17 +102,12 @@ void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& 
         }
 
         // Draw restart text below the winner text instead of above it
-        Vector2 textWidth = MeasureTextEx(globalFont, "Press [R] to restart", 60, 2);
-        DrawCustomText("Press [R] to restart", (WIDTH - textWidth.x) / 2, 450, 60, RED);
+        Vector2 RestartWidth = MeasureTextEx(globalFont, "Press [R] to restart", 60, 2);
+        DrawCustomText("Press [R] to restart", (WIDTH - RestartWidth.x) / 2, 450, 60, RED);
 
         if (IsKeyPressed(KEY_R))
         {
-            paddle1.hp = 100.0f;
-            paddle2.hp = 100.0f;
-            ball.speedX += 300 * multiplier;
-            ball.speedY += 280 * multiplier;
-            multiplier += 0.4f;
-            GameTime = 90.0f;
+            ResetAll(ball, paddle1, paddle2, multiplier);
         }
     }
 }

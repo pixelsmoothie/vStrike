@@ -91,7 +91,7 @@ int main()
     //called here after initializing the window so the openGL texture could load
     gC.currentScreen = new MenuScreen();
 
-    globalFont = LoadFontEx("assets/IBM_Plex_Mono/IBMPlexMono-Regular.ttf", 40, NULL, 0);
+    globalFont = LoadFontEx("assets/IBM_Plex_Mono/IBMPlexMono-Regular.ttf", 80, NULL, 0);
     SetTextureFilter(globalFont.texture, TEXTURE_FILTER_BILINEAR);
 
     gameNameFont = LoadFontEx("assets/ElectroGarden.ttf", 200, NULL, 0);

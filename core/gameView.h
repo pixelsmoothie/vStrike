@@ -29,7 +29,7 @@ public:
                  ball(WIDTH / 2, HEIGHT / 2, 15.0f, 500.0f, 360.0f, VIOLET),
                  multiplier(1.3f)
     {
-        gameBG = LoadTexture("assets/UI/BG/game_play_bg.png");
+        gameBG = LoadTexture("assets/UI/BG/game_bg_view.png");
     }
 
     ~GameView()
@@ -49,11 +49,13 @@ public:
 
     void Draw() override {
         DrawTexture(gameBG, 0, 0, WHITE);
+        DrawChamferedRectangleLines({6.0f, 6.0f, WIDTH - 12.0f, HEIGHT - 12.0f}, 10.0f, 4.0f, RAYWHITE);
+
         paddle1.Draw();
         paddle2.Draw();
-        DrawLine(WIDTH / 2, topPos, WIDTH / 2, HEIGHT , GRAY);
+        DrawLine(WIDTH / 2, topPos, WIDTH / 2, HEIGHT - 6.0f , RAYWHITE);
         ball.Draw();
-        DrawLine(0, topPos, WIDTH, topPos, RAYWHITE);
+        DrawLine(6.0f, topPos, WIDTH - 6.0f, topPos, RAYWHITE);
         TopBar();
         GameOutcomeAndRestart(ball, paddle1, paddle2, multiplier);
     }

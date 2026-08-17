@@ -8,7 +8,7 @@
 #include <string>
 
 static float topPos = 60.0f;
-float GameTime = 90.0f;
+float GameTime = 5.0f;
 
 void UpdateTimer(float dt)
 {
