@@ -1,112 +1,85 @@
 # vStrike
 
-A 2D battle pong engine with a tabular Q-learning AI agent, built in C++17 with Raylib and cross-compiled to WebAssembly.
+A cyberpunk-themed battle pong game built from scratch in C++17 and Raylib, compiled for both desktop and the web (WebAssembly).
 
-**Live Browser Demo:** [pixelsmoothie.github.io/vStrike](https://pixelsmoothie.github.io/vStrike/)
+**Play in your browser:** [pixelsmoothie.github.io/vStrike](https://pixelsmoothie.github.io/vStrike/)
 
 ---
 
-## Game Overview & Features
+## What is this?
 
-- **Combat Pong Mechanics:** Health-based scoring system, velocity multipliers, and dynamic collision response.
-- **Game Modes:** Local 1v1 multiplayer and VS AI battle modes.
-- **UI & State Management:** Custom screen state machine (`GameScreen`, `GameStates`) with smooth scene transitions.
-- **Adaptive Reinforcement Learning AI:** An opponent agent trained via Q-Learning that learns trajectory prediction, positioning, and rally defense through self-play.
+Standard Pong gets boring fast, so I wanted to turn it into a combat game:
+- **Health bars instead of points:** You don't just score — you deplete your opponent's HP with every missed volley.
+- **Rally multipliers:** The longer the rally goes on, the faster and heavier the ball gets.
+- **Three ways to play:** Hop into a local 1v1 couch match, connect across your Wi-Fi for LAN multiplayer, or fight a self-learning bot.
 
-### Screen Navigation & State Flow
 <p align="center">
-  <img src="assets/screen_flow.png" width="460" alt="Screen Navigation Flow" />
+  <img src="assets/screen_flow.png" width="460" alt="Screen Flow" />
 </p>
 
 ---
 
-## AI Architecture (Tabular Q-Learning)
+## The AI: Teaching a Bot to Play Pong from Scratch
 
-The AI opponent is implemented from scratch in pure C++ without external machine learning dependencies, using an `std::unordered_map` Q-Table.
+I wanted the bot to actually learn the game instead of following hardcoded `paddle.y = ball.y` tracking rules. But I also didn't want to drag in heavy frameworks like PyTorch or TensorFlow just for a 2D game.
 
-### Q-Learning Closed Loop
+Everything is written in pure C++ using **Tabular Q-learning** stored in a hash map (`std::unordered_map`).
+
 <p align="center">
-  <img src="assets/rl_loop.png" width="520" alt="Q-Learning Decision Loop" />
+  <img src="assets/rl_loop.png" width="520" alt="Q-Learning Loop" />
 </p>
 
-### 1. State Space Discretization (512 States)
-To avoid the continuous state-space explosion on an 800x1000 resolution, the continuous coordinate space is discretized into 512 discrete states:
+### Shrinking the World (512 States)
+An 800×1000 canvas has nearly a million coordinate combinations — way too huge for a basic lookup table. To keep it lightweight and fast, I bucketed the coordinates into a grid:
+- **Ball X:** 4 horizontal zones
+- **Ball Y:** 8 vertical zones
+- **Paddle Y:** 8 vertical zones
+- **Ball Direction:** 2 states (heading left or right)
 
-$$\text{State ID} = (\text{Ball}_X) + (\text{Ball}_Y \times 4) + (\text{Paddle}_Y \times 32) + (\text{Dir}_X \times 256)$$
-
-- **Ball X:** 4 spatial columns
-- **Ball Y:** 8 spatial rows
-- **Paddle Y:** 8 spatial rows
-- **Ball Direction X:** 2 binary states (moving left / right)
-
-### 2. Bellman Update Formulation
-Q-values update on each state transition using the standard temporal difference formulation:
-
-$$Q(s, a) \leftarrow Q(s, a) + \alpha \left[ R + \gamma \max_{a'} Q(s', a') - Q(s, a) \right]$$
-
-- **Learning Rate ($\alpha$):** `0.1`
-- **Discount Factor ($\gamma$):** `0.9`
-- **Exploration Rate ($\epsilon$):** Decays by `0.005` per episode ($1.0 \rightarrow 0.005$)
-
-### 3. Continuous Reward Shaping
-To resolve the sparse reward problem of terminal win/loss conditions, the agent receives frame-by-frame continuous distance feedback:
-
-$$R_{\text{dense}} = - \left( |\text{Paddle}_{\text{center}} - \text{Ball}_Y| \times 0.1 \right)$$
-$$R_{\text{terminal}} = +100 \text{ (Hit / Scoring)}, \quad -100 \text{ (Missed Rally)}$$
-
----
-
-## Empirical Results
-
-Telemetry logged during training sessions shows convergence from random initial exploration to consistent rally defense across 450+ episodes:
-
-![Convergence Analysis](convergence_graph.png)
-
-| Training Phase | Episodes | Epsilon ($\epsilon$) | Win Rate | Average Reward |
-|---|---|---|---|---|
-| **Initial Exploration** | 1 – 50 | $1.00 \rightarrow 0.75$ | **0%** | $-1500 \text{ to } -2400$ |
-| **Policy Formulation** | 51 – 200 | $0.75 \rightarrow 0.01$ | **~30%** | $+500 \text{ to } +2000$ |
-| **Convergence** | 201 – 450+ | $0.005$ | **~75%** | **$+2500 \text{ to } +5350$** |
-
----
-
-## Tech Stack & Project Architecture
-
-- **Language:** C++17
-- **Graphics & Audio:** Raylib 5.0
-- **Build System:** CMake $\ge$ 3.20 + Ninja
-- **Analytics:** Python 3 (Pandas, Matplotlib)
-
-### Directory Structure
 ```
-vStrike/
-├── core/                   # Game loops, state views, and RL Brain
-│   ├── aiView.h
-│   ├── gameView.h
-│   ├── localView.h
-│   └── qBrain.h
-├── entities/               # Game objects (Paddle, Ball)
-├── physics/                # Collision resolution and kinematic rules
-├── global/                 # State management, fonts, constants
-├── UI/                     # UI components, health bars, shaders
-└── data_vizualization/     # Performance metrics and analysis scripts
+State ID = (Ball_X) + (Ball_Y * 4) + (Paddle_Y * 32) + (Dir_X * 256)
 ```
+This condenses the entire playing field down to **512 discrete states**.
+
+### How It Learns
+1. **The Bellman Update:** Every step, the bot updates its confidence for each action:
+   $$Q(s, a) \leftarrow Q(s, a) + \alpha \left[ R + \gamma \max_{a'} Q(s', a') - Q(s, a) \right]$$
+   *(Learning rate $\alpha = 0.1$, Discount factor $\gamma = 0.9$)*
+2. **Reward shaping:** If you only give the bot points when it wins or loses, it takes forever to figure out what it did right. To speed it up, it gets a tiny negative penalty every frame based on how far its paddle center is from the ball:
+   $$R_{\text{frame}} = - (|\text{Paddle}_{\text{center}} - \text{Ball}_Y| \times 0.1)$$
+   Successful hits award $+100$, and conceding a goal gives $-100$.
+3. **Exploration decay:** Starts out trying random moves ($\epsilon = 1.0$) and gradually settles into its learned strategy ($\epsilon \rightarrow 0.005$).
+
+### The Result
+
+Around 200 episodes in, the bot stops flailing and starts tracking rallies cleanly. By episode 400+, it holds consistent defense and punishes tricky angles.
+
+<p align="center">
+  <img src="convergence_graph.png" width="600" alt="Convergence Graph" />
+</p>
 
 ---
 
-## Building and Running
+## Tech Stack
+
+- **Game Engine & Graphics:** C++17, Raylib 5.0
+- **Web Export:** Emscripten (WebAssembly + WebGL)
+- **Networking:** ENet (UDP, authoritative host @ 60 Hz)
+- **Fonts & Visuals:** IBM Plex Mono, custom chamfered shaders, cyberpunk dark palette
+
+---
+
+## Getting Started
 
 ### Prerequisites
-- CMake $\ge 3.20$
-- Modern C++ compiler (`g++`, `clang++`, or MSVC with C++17 support)
+- CMake 3.20+
+- A modern C++17 compiler (GCC, Clang, or MSVC)
 
-### Build
+### Build & Run (Desktop)
 ```bash
-# Clone repository
 git clone https://github.com/pixelsmoothie/vStrike.git
 cd vStrike
 
-# Configure and build
 cmake -B build -S .
 cmake --build build --config Release
 
@@ -114,36 +87,42 @@ cmake --build build --config Release
 ./build/PongArena
 ```
 
-### LAN Multiplayer
-Two machines on the same network can play against each other:
-
-1. **Host (P1):** Launch the game → select **Network** mode → press `H` to host on port 7777
-2. **Host:** Run `ipconfig` (Windows) or `ip a` (Linux) and note the local IPv4 address (e.g. `192.168.1.42`)
-3. **Client (P2):** Launch the game → select **Network** mode → clear the IP field, type the host's IP → press `J` to connect
-
-Once connected, the host runs the authoritative physics loop at 60 Hz and replicates state to the client each tick.
-
-### Network Stress Test
-A standalone multi-threaded harness in `tests/net_stress_test.cpp` fires 500+ packets per burst and logs RTT, delivery rate, and socket throughput to CSV.
-
+### Build for Web (WebAssembly)
+Make sure you have the [Emscripten SDK](https://emscripten.org/) installed and active:
 ```bash
-# Build the stress test (requires ENet — already vendored in networking/)
-g++ -std=c++17 -DENET_IPV4_ONLY tests/net_stress_test.cpp networking/enet_impl.cpp -o stress_test -lws2_32
-./stress_test
+emcmake cmake -B build-web -DPLATFORM=Web
+cmake --build build-web
+
+# Serve locally
+python -m http.server 8080 --directory build-web
 ```
 
 ---
 
-## Roadmap
+## Playing LAN Multiplayer
 
-- [x] Modern C++17 Battle Pong Arena with Raylib 5.0
-- [x] Custom Tabular Q-Learning Engine (512 States)
-- [x] Per-Episode Metrics Telemetry and Analysis
-- [ ] Automated Unit Testing Suite (Physics Engine & Bellman Update Math)
-- [ ] In-Game Real-Time Performance Dashboard
-- [x] Networked Multiplayer (ENet/UDP, authoritative server, 60 Hz state replication, stress-tested)
+You can play against a friend on the same local Wi-Fi:
+
+1. **Player 1 (Host):** Go to **Multiplayer** → press `H` to host.
+2. Check your local IP (`ipconfig` on Windows, `ip a` on Linux) — for example `192.168.1.15`.
+3. **Player 2 (Client):** Go to **Multiplayer** → enter Player 1's IP → press `J` to connect.
+
+The host runs the simulation and replicates paddle and ball state to the client at 60 Hz over UDP.
+
+---
+
+## Stress Testing the Netcode
+
+To verify packet reliability under burst traffic, there's a standalone test harness in `tests/net_stress_test.cpp`:
+
+```bash
+g++ -std=c++17 -DENET_IPV4_ONLY tests/net_stress_test.cpp networking/enet_impl.cpp -o stress_test -lws2_32
+./stress_test
+```
+This pumps 500+ packets in bursts and prints round-trip time (RTT), drop rates, and bandwidth stats.
 
 ---
 
 ## License
-Distributed under the MIT License. See `LICENSE` for details.
+
+MIT License. Feel free to fork, experiment, or build on it!
