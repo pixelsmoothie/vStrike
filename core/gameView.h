@@ -11,6 +11,7 @@
 #include "../UI/HealthBar.h"
 #include "../physics/physicsEngine.h"
 #include "../UI/GameTimer.h"
+#include "settingsOverlay.h"
 
 class GameView : public GameScreen
 {

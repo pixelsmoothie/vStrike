@@ -2,12 +2,13 @@
 #include "global/constants.h"
 #include "entities/paddle.h"
 #include "entities/ball.h"
-#include "UI/healthBar.h"
+#include "UI/HealthBar.h"
 #include "physics/physicsEngine.h"
 #include "global/states/masterIncluder.h"
 #include "UI/fader.h"
 #include "global/customFont.h"
 #include "global/charSelect.h"
+#include "global/appSettings.h"
 #include <optional>
 
 #include "global/states/characterSelect.h"
@@ -94,6 +95,10 @@ void UpdateFrame()
         gC.currentScreen->Draw();
     }
     gC.fader.Draw();
+    if (AppSettings::showFPS)
+    {
+        DrawFPS(10, 10);
+    }
     EndDrawing();
 }
 
