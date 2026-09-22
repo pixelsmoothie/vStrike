@@ -7,6 +7,10 @@
 #include "global/states/masterIncluder.h"
 #include "UI/fader.h"
 #include "global/customFont.h"
+#include "global/charSelect.h"
+#include <optional>
+
+#include "global/states/characterSelect.h"
 
 #if defined(PLATFORM_WEB)
 #include <emscripten/emscripten.h>
@@ -21,6 +25,9 @@ struct GameContext
     GameStates pendingState = currentState;
     GameScreen* currentScreen = nullptr;
     Fader fader{0.6f};
+
+    charData char1 = getCharData(Characters::CHAR_XLR8);
+    charData char2 = getCharData(Characters::CHAR_MIMO);
 } gC;
 
 void UpdateFrame()
@@ -54,11 +61,11 @@ void UpdateFrame()
         switch (gC.pendingState)
         {
         case GameStates::STATE_LOCAL_VIEW:
-            gC.currentScreen = new LocalView();
+            gC.currentScreen = new LocalView(gC.char1, gC.char2);
             break;
 
         case GameStates::STATE_AI_VIEW:
-            gC.currentScreen = new AIView();
+            gC.currentScreen = new AIView(gC.char1, gC.char2);
             break;
 
         case GameStates::STATE_MENU:
@@ -71,6 +78,14 @@ void UpdateFrame()
 
         case GameStates::STATE_MODE_SELECTION:
             gC.currentScreen = new ModeSelection();
+            break;
+
+        case GameStates::STATE_CHARACTER_SELECTION:
+            gC.currentScreen = new CharacterSelection();
+            break;
+
+        case GameStates::STATE_NETWORK_VIEW:
+            gC.currentScreen = new NetworkView(gC.char1, gC.char2);
             break;
         }
     }

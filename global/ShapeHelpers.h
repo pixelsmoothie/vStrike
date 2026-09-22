@@ -16,7 +16,7 @@ inline void DrawChamferedRectangleLines(Rectangle rect, float cutSize, float thi
 
     // The 8 vertices going clockwise from top-left:
     Vector2 points[9] = {
-        { x + c, y },         // Top-left cut end
+        { x + c, y }  ,       // Top-left cut end
         { x + w - c, y },     // Top-right cut start
         { x + w, y + c },     // Top-right cut end
         { x + w, y + h - c }, // Bottom-right cut start

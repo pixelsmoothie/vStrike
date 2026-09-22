@@ -5,6 +5,7 @@
 #ifndef PONGARENA_PADDLE_H
 #define PONGARENA_PADDLE_H
 #include "raylib.h"
+#include "../global/charSelect.h"
 
 struct Paddle
 {
@@ -24,9 +25,17 @@ struct Paddle
     void Update(float deltaTime);
     void Draw();
 
-    Paddle(float startX, float startY, float w, float h, float s, Color c, int dKey, int uKey, float hp, float maxHp) :
-    x(startX), y(startY), width(w), height(h), speed(s), color(c), downKey(dKey), upKey(uKey), hp(hp), maxHp(maxHp) {}
-
+    Paddle(float startX, float startY, const charData& data, int dKey, int uKey, float hp) :
+    x(startX),
+    y(startY),
+    width(data.width),
+    height(data.height),
+    speed(data.speed),
+    color(data.color),
+    downKey(dKey),
+    upKey(uKey),
+    hp(hp),
+    maxHp(data.maxHP) {}
 };
 
 #endif //PONGARENA_PADDLE_H

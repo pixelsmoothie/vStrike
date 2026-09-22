@@ -112,7 +112,7 @@ foreach(i RANGE ${retry_number})
       message(VERBOSE "Using src='${url}'")
 
       
-      set(CMAKE_TLS_VERIFY "0")
+      
       
       
       

@@ -89,6 +89,7 @@ public:
                 textColor = VIOLET;
                 if (selectedState == 0) return GameStates::STATE_LOCAL_VIEW;
                 if (selectedState == 1) return GameStates::STATE_AI_VIEW;
+                if (selectedState == 2) return GameStates::STATE_NETWORK_VIEW;
             }
         }
         return GameStates::STATE_MODE_SELECTION;
@@ -98,9 +99,10 @@ public:
     {
         DrawTexture(modeBG, 0, 0, WHITE);
 
-        int Label = MeasureText("SELECT MODE", 60);
-        DrawText("SELECT MODE", (WIDTH - Label) / 2, 150, 60, RAYWHITE);
+        Vector2 Label = MeasureTextEx(globalFont,"SELECT MODE", 60, 2.0f);
+        DrawCustomText("SELECT MODE", (WIDTH - Label.x) / 2, 150, 60, RAYWHITE);
 
+        //debug grid lines
         //DrawLine(W, 0, W, HEIGHT, RAYWHITE);
         //DrawLine(0, H, WIDTH, H, RAYWHITE);
 

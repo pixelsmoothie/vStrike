@@ -16,12 +16,16 @@ void ResolveCollision(Ball& ball, Paddle& paddle1, Paddle& paddle2)
 
     if (CheckCollisionCircleRec(center, rad, Rec))      //center, radius, paddle's position and dimensions
     {
+        if (IsKeyDown(paddle1.upKey))   ball.speedY -= 120.0f;
+        if (IsKeyDown(paddle1.downKey)) ball.speedY += 120.0f;     //boosts speed of ball on contact moving paddle
         ball.Cx = paddle1.x + paddle1.width + ball.radius;
         ball.speedX *= -1;
     };
 
     if (CheckCollisionCircleRec(center, rad, Rec1))
     {
+        if (IsKeyDown(paddle1.upKey))   ball.speedY -= 120.0f;
+        if (IsKeyDown(paddle1.downKey)) ball.speedY += 120.0f;
         ball.Cx = paddle2.x - ball.radius;
         ball.speedX *= -1;
     };
@@ -31,14 +35,16 @@ void CheckScoreAndReset(Ball& ball, Paddle& paddle1, Paddle& paddle2)
 {
     if (ball.Cx < 0)
     {
-        paddle1.hp -= 20;                          //amount of hp to be reduced on miss
+        paddle1.hp -= 20.0f;                          //amount of hp to be reduced on miss
+        if (paddle1.hp < 0.0f) paddle2.hp = 0.0f;
         ball.Cx = WIDTH/2;
         ball.Cy = HEIGHT/2;
     }
 
     if (ball.Cx > WIDTH)
     {
-        paddle2.hp -= 20;
+        paddle2.hp -= 20.0f;
+        if (paddle2.hp < 0.0f) paddle2.hp = 0.0f;
         ball.Cx = WIDTH/2;
         ball.Cy = HEIGHT/2;
     }
@@ -57,8 +63,8 @@ void StopAll(Ball& ball)
 
 void ResetAll(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& multiplier)
 {
-    paddle1.hp = 100.0f;
-    paddle2.hp = 100.0f;
+    paddle1.hp = paddle1.maxHp;
+    paddle2.hp = paddle2.maxHp;
     ball.speedX += 300 * multiplier;
     ball.speedY += 280 * multiplier;
     multiplier += 0.4f;
@@ -75,11 +81,11 @@ void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& 
 
         StopAll(ball);
 
-        int warningWidth = MeasureText("Time's UP!!", 60);
-        DrawCustomText("Time's UP!!", (WIDTH - warningWidth) / 2, 350, 60, WHITE);
+        int warningWidth = MeasureText("Time's UP!!", 40);
+        DrawCustomText("Time's UP!!", (WIDTH - warningWidth) / 2, 350, 40, WHITE);
 
-        Vector2 RestartWidth = MeasureTextEx(globalFont, "Press [R] to restart", 60, 2);
-        DrawCustomText("Press [R] to restart", (WIDTH - RestartWidth.x) / 2, 450, 60, RED);
+        Vector2 RestartWidth = MeasureTextEx(globalFont, "Press [R] to restart", 40, 2);
+        DrawCustomText("Press [R] to restart", (WIDTH - RestartWidth.x) / 2, 450, 40, RED);
 
         if (IsKeyPressed(KEY_R))
         {
@@ -93,17 +99,17 @@ void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& 
 
         if (paddle1.hp == 0)
         {
-            int textWidth = MeasureText("Player 2 Wins", 60);
-            DrawCustomText("Player 2 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
+            int textWidth = MeasureText("Player 2 Wins", 40);
+            DrawCustomText("Player 2 Wins", (WIDTH - textWidth) / 2, 350, 40, WHITE);
         }else
         {
-            int textWidth = MeasureText("Player 1 Wins", 60);
-            DrawCustomText("Player 1 Wins", (WIDTH - textWidth) / 2, 350, 60, WHITE);
+            int textWidth = MeasureText("Player 1 Wins", 40);
+            DrawCustomText("Player 1 Wins", (WIDTH - textWidth) / 2, 350, 40, WHITE);
         }
 
         // Draw restart text below the winner text instead of above it
-        Vector2 RestartWidth = MeasureTextEx(globalFont, "Press [R] to restart", 60, 2);
-        DrawCustomText("Press [R] to restart", (WIDTH - RestartWidth.x) / 2, 450, 60, RED);
+        Vector2 RestartWidth = MeasureTextEx(globalFont, "Press [R] to restart", 40, 2);
+        DrawCustomText("Press [R] to restart", (WIDTH - RestartWidth.x) / 2, 450, 40, RED);
 
         if (IsKeyPressed(KEY_R))
         {

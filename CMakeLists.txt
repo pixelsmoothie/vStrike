@@ -47,8 +47,19 @@ add_executable(PongArena main.cpp
         UI/GameTimer.cpp
         UI/GameTimer.h
         global/ShapeHelpers.h
+        global/charSelect.h
+        global/states/characterSelect.h
+        networking/NetworkProtocol.h
+        networking/enet.h
+        networking/enet_impl.cpp
+        networking/ENetManager.h
+        networking/ENetManager.cpp
+        core/networkView.h
 )
 target_link_libraries(PongArena PRIVATE raylib)
+if(WIN32)
+    target_link_libraries(PongArena PRIVATE ws2_32 winmm)
+endif()
 
 # Automatically copy all assets to the build/executable directory on every single build
 add_custom_command(TARGET PongArena POST_BUILD

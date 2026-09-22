@@ -7,13 +7,13 @@
 
 void Paddle :: Draw()
 {
-    Rectangle rect;
-    rect.x = x;
-    rect.y = y;
-    rect.width = width;
-    rect.height = height;
+    Rectangle paddleRect;
+    paddleRect.x = x;
+    paddleRect.y = y;
+    paddleRect.width = width;
+    paddleRect.height = height;
 
-    DrawRectangleRoundedLines(rect, 0.4f, 16, 1.0f, color);
+    DrawRectangleRoundedLines(paddleRect, 0.4f, 16, 1.0f, color);
 }
 
 void Paddle :: Update(float deltaTime)
@@ -21,9 +21,9 @@ void Paddle :: Update(float deltaTime)
     if (IsKeyDown(upKey))
     {
         y -= (speed * deltaTime);                   //top boundary
-        if (y < 60)
+        if (y < 62)
         {
-             y = 60;
+             y = 62;
         }
     }
 
@@ -32,7 +32,7 @@ void Paddle :: Update(float deltaTime)
         y += (speed * deltaTime);
         if (y + height > HEIGHT)
         {
-            y = HEIGHT - height;
+            y = (HEIGHT - height) - 8.0f;
         }
     }
 }

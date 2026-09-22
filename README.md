@@ -123,7 +123,7 @@ cmake --build build --config Release
 - [x] Per-Episode Metrics Telemetry and Analysis
 - [ ] Automated Unit Testing Suite (Physics Engine & Bellman Update Math)
 - [ ] In-Game Real-Time Performance Dashboard
-- [ ] Networked Multiplayer (Client-Server UDP Architecture with Prediction)
+- [x] Networked Multiplayer (ENet/UDP, authoritative server, 60 Hz state replication, stress-tested)
 
 ---
 

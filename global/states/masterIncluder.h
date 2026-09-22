@@ -11,4 +11,5 @@
 #include "settingScreen.h"
 #include "../../core/localView.h"
 #include "../../core/aiView.h"
+#include "../../core/networkView.h"
 #endif //PONGARENA_MASTERINCLUDER_H

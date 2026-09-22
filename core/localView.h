@@ -13,7 +13,7 @@ private:
     bool isPaused = false;
     SettingsOV settingsOv;
 public:
-    LocalView() : GameView() {}
+    LocalView(charData p1, charData p2) : GameView(p1, p2) {}
 
     GameStates Update(float dt) override
     {

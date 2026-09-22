@@ -7,6 +7,7 @@
 #include "gameView.h"
 #include "qBrain.h"
 #include "settingsOverlay.h"
+#include "../global/charSelect.h"
 #include <cmath>
 
 class AIView : public GameView
@@ -17,7 +18,7 @@ private:
 
     QBrain brain;
 public:
-    AIView() : GameView() {}
+    AIView(charData p1, charData p2) : GameView(p1, p2) {}
 
     GameStates Update(float dt) override
     {

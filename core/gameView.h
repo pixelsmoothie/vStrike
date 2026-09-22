@@ -24,10 +24,11 @@ protected:
     Texture2D gameBG;
 
 public:
-    GameView() : paddle1(20.0f, HEIGHT / 2 - 150.0f / 2, 30.0f, 150.0f, 400.0f, VIOLET, KEY_S, KEY_W, 100.0f, 100.0f),
-                 paddle2(WIDTH - 50.0f, HEIGHT / 2 - 150.0f / 2, 30.0f, 150.0f, 400.0f, VIOLET, KEY_DOWN, KEY_UP, 100.0f, 100.0f),
-                 ball(WIDTH / 2, HEIGHT / 2, 15.0f, 500.0f, 360.0f, VIOLET),
-                 multiplier(1.3f)
+    GameView(charData p1, charData p2) :
+        paddle1(20.0f, HEIGHT / 2 - 150.0f / 2, p1, KEY_S, KEY_W, 100.0f),
+        paddle2(WIDTH - 50.0f, HEIGHT / 2 - 150.0f / 2, p2, KEY_DOWN, KEY_UP, 100.0f),
+        ball(WIDTH / 2, HEIGHT / 2, 15.0f, 500.0f, 360.0f, VIOLET),
+        multiplier(1.3f)
     {
         gameBG = LoadTexture("assets/UI/BG/game_bg_view.png");
     }

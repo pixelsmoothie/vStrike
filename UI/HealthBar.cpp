@@ -12,8 +12,10 @@ static float topPos = 60;
 void RenderHealthBars(Paddle& paddle1, Paddle& paddle2)
 {
     float percent1 = paddle1.hp / paddle1.maxHp;
+    if (percent1 > 1.0f) percent1 = 1.0f;              //clamping so they stay 100%
+    if (percent1 < 0.0f) percent1 = 0.0f;
 
-    int reductionValue1 = paddle1.maxHp * percent1;
+    int reductionValue1 = static_cast<int>(paddle1.maxHp * percent1);
     std::string HP1 = std::to_string(reductionValue1);
 
     Rectangle rect1;
@@ -31,11 +33,13 @@ void RenderHealthBars(Paddle& paddle1, Paddle& paddle2)
     rect1Outline.y = (topPos - rect1Outline.height) / 2;
     DrawChamferedRectangleLines(rect1Outline, 5.0f, 15.0f, RAYWHITE);
 
-    DrawText(HP1.c_str(), (rect1.x + rect1Outline.width + 30), (topPos - rect1.height) / 2, 30, GREEN);
+    DrawText(HP1.c_str(), static_cast<int>(rect1.x + rect1Outline.width + 30), static_cast<int>(topPos - rect1.height) / 2, 30, GREEN);
 
     float percent2 = paddle2.hp / paddle2.maxHp;
+    if (percent2 > 1.0f) percent2 = 1.0f;              //clamping so they stay 100%
+    if (percent2 < 0.0f) percent2 = 0.0f;
 
-    int reductionValue2 = paddle2.maxHp * percent2;
+    int reductionValue2 = static_cast<int>(paddle2.maxHp * percent2);
     std::string HP2 = std::to_string(reductionValue2);
 
     Rectangle rect2;
@@ -52,5 +56,5 @@ void RenderHealthBars(Paddle& paddle1, Paddle& paddle2)
     rect2Outline.height = rect2.height;
     DrawChamferedRectangleLines(rect2Outline, 5.0f, 15.0f, RAYWHITE);
 
-    DrawText(HP2.c_str(), (rect2.x - 70), (topPos - rect2.height) / 2, 30, GREEN);
+    DrawText(HP2.c_str(), static_cast<int>(rect2.x - 70), static_cast<int>(topPos - rect2.height) / 2, 30, GREEN);
 }
