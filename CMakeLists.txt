@@ -76,6 +76,7 @@ if(EMSCRIPTEN)
     target_link_options(PongArena PRIVATE
         "-sUSE_GLFW=3"
         "-sALLOW_MEMORY_GROWTH=1"
+        "-sEXPORTED_RUNTIME_METHODS=ccall,cwrap,HEAPF32"
         "--preload-file" "${CMAKE_CURRENT_SOURCE_DIR}/assets@assets"
         "--shell-file" "${CMAKE_CURRENT_SOURCE_DIR}/shell.html"
     )
