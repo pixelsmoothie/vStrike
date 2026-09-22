@@ -65,7 +65,7 @@ Around 200 episodes in, the bot stops flailing and starts tracking rallies clean
 - **Game Engine & Graphics:** C++17, Raylib 5.0
 - **Web Export:** Emscripten (WebAssembly + WebGL)
 - **Networking:** ENet (UDP, authoritative host @ 60 Hz)
-- **Fonts & Visuals:** IBM Plex Mono, custom chamfered shaders, cyberpunk dark palette
+- **Fonts & Visuals:** IBM Plex Mono, custom chamfered shaders
 
 ---
 
