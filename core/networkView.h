@@ -4,6 +4,7 @@
 #include "gameView.h"
 #include "settingsOverlay.h"
 #include "../networking/ENetManager.h"
+#include "../global/audioManager.h"
 
 class NetworkView : public GameView
 {
@@ -85,6 +86,7 @@ public:
             matchStarted = true;
             ball.speedX = 500.0f;
             ball.speedY = 360.0f;
+            PlaySound(AudioManager::startSound);
         }
 
         // Reset match if [R] is pressed

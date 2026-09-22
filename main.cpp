@@ -9,6 +9,7 @@
 #include "global/customFont.h"
 #include "global/charSelect.h"
 #include "global/appSettings.h"
+#include "global/audioManager.h"
 #include <optional>
 
 #include "global/states/characterSelect.h"
@@ -107,6 +108,7 @@ int main()
 {
     InitWindow(WIDTH, HEIGHT, "vStrike");
     SetTargetFPS(60);
+    AudioManager::Init();
 
     //called here after initializing the window so the openGL texture could load
     gC.currentScreen = new MenuScreen();
@@ -130,6 +132,7 @@ int main()
 #endif
 
     UnloadFont(globalFont);
+    AudioManager::Cleanup();
     CloseWindow();
     return 0;
 }

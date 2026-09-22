@@ -7,6 +7,7 @@
 #include "gameScreen.h"
 #include "raylib.h"
 #include "../ShapeHelpers.h"
+#include "../audioManager.h"
 
 class ModeSelection : public GameScreen
 {
@@ -87,6 +88,7 @@ public:
             {
                 btnOutline = VIOLET;
                 textColor = VIOLET;
+                PlaySound(AudioManager::startSound);
                 if (selectedState == 0) return GameStates::STATE_LOCAL_VIEW;
                 if (selectedState == 1) return GameStates::STATE_AI_VIEW;
                 if (selectedState == 2) return GameStates::STATE_NETWORK_VIEW;

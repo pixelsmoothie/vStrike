@@ -3,6 +3,7 @@
 //
 #include "ball.h"
 #include "../global/constants.h"
+#include "../global/audioManager.h"
 
 void Ball ::  Draw()
 {
@@ -17,12 +18,14 @@ void Ball :: Update(float deltaTime)
     {
         Cy = 60 + radius;                //To avoid the endless jitter loop
         speedY *= -1;
+        PlaySound(AudioManager::wallSound);
     }
 
     if (Cy + radius >= HEIGHT)           //Bottom Collision Detection
     {
         Cy = HEIGHT - radius;
         speedY *= -1;
+        PlaySound(AudioManager::wallSound);
     }
 
     // if (Cx - radius <= 0)             //Left Collision Detection

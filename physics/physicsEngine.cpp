@@ -4,6 +4,7 @@
 #include "physicsEngine.h"
 #include "../global/constants.h"
 #include "../global/customFont.h"
+#include "../global/audioManager.h"
 #include "../UI/GameTimer.h"
 
 void ResolveCollision(Ball& ball, Paddle& paddle1, Paddle& paddle2)
@@ -16,18 +17,26 @@ void ResolveCollision(Ball& ball, Paddle& paddle1, Paddle& paddle2)
 
     if (CheckCollisionCircleRec(center, rad, Rec))      //center, radius, paddle's position and dimensions
     {
-        if (IsKeyDown(paddle1.upKey))   ball.speedY -= 120.0f;
-        if (IsKeyDown(paddle1.downKey)) ball.speedY += 120.0f;     //boosts speed of ball on contact moving paddle
-        ball.Cx = paddle1.x + paddle1.width + ball.radius;
-        ball.speedX *= -1;
+        if (ball.speedX < 0)
+        {
+            if (IsKeyDown(paddle1.upKey))   ball.speedY -= 120.0f;
+            if (IsKeyDown(paddle1.downKey)) ball.speedY += 120.0f;     //boosts speed of ball on contact moving paddle
+            ball.Cx = paddle1.x + paddle1.width + ball.radius;
+            ball.speedX *= -1;
+            PlaySound(AudioManager::hitSound);
+        }
     };
 
     if (CheckCollisionCircleRec(center, rad, Rec1))
     {
-        if (IsKeyDown(paddle1.upKey))   ball.speedY -= 120.0f;
-        if (IsKeyDown(paddle1.downKey)) ball.speedY += 120.0f;
-        ball.Cx = paddle2.x - ball.radius;
-        ball.speedX *= -1;
+        if (ball.speedX > 0)
+        {
+            if (IsKeyDown(paddle2.upKey))   ball.speedY -= 120.0f;
+            if (IsKeyDown(paddle2.downKey)) ball.speedY += 120.0f;
+            ball.Cx = paddle2.x - ball.radius;
+            ball.speedX *= -1;
+            PlaySound(AudioManager::hitSound);
+        }
     };
 }
 
@@ -39,6 +48,7 @@ void CheckScoreAndReset(Ball& ball, Paddle& paddle1, Paddle& paddle2)
         if (paddle1.hp < 0.0f) paddle2.hp = 0.0f;
         ball.Cx = WIDTH/2;
         ball.Cy = HEIGHT/2;
+        PlaySound(AudioManager::scoreSound);
     }
 
     if (ball.Cx > WIDTH)
@@ -47,6 +57,7 @@ void CheckScoreAndReset(Ball& ball, Paddle& paddle1, Paddle& paddle2)
         if (paddle2.hp < 0.0f) paddle2.hp = 0.0f;
         ball.Cx = WIDTH/2;
         ball.Cy = HEIGHT/2;
+        PlaySound(AudioManager::scoreSound);
     }
 }
 
@@ -61,6 +72,9 @@ void StopAll(Ball& ball)
     ball.Cy = HEIGHT/2;
 }
 
+bool flag = true;
+bool gameOverSoundPlayed = false;
+
 void ResetAll(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& multiplier)
 {
     paddle1.hp = paddle1.maxHp;
@@ -69,15 +83,20 @@ void ResetAll(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& multiplier)
     ball.speedY += 280 * multiplier;
     multiplier += 0.4f;
     GameTime = 90.0f;
+    gameOverSoundPlayed = false;
 }
-
-bool flag = true;
 
 void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& multiplier)
 {
     if (GameTime <= 0)
     {
         flag = false;
+
+        if (!gameOverSoundPlayed)
+        {
+            PlaySound(AudioManager::gameOverSound);
+            gameOverSoundPlayed = true;
+        }
 
         StopAll(ball);
 
@@ -95,6 +114,12 @@ void GameOutcomeAndRestart(Ball& ball, Paddle& paddle1, Paddle& paddle2, float& 
 
     if (paddle1.hp == 0 || paddle2.hp == 0 && flag)
     {
+        if (!gameOverSoundPlayed)
+        {
+            PlaySound(AudioManager::gameOverSound);
+            gameOverSoundPlayed = true;
+        }
+
         StopAll(ball);
 
         if (paddle1.hp == 0)

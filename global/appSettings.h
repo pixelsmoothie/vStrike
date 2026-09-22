@@ -1,5 +1,5 @@
 //
-// Created for PongArena global settings
+// Created by Niraj on 23-09-2026.
 //
 
 #ifndef PONGARENA_APPSETTINGS_H

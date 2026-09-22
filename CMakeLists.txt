@@ -26,6 +26,7 @@ add_executable(PongArena main.cpp
         entities/paddle.cpp
         global/constants.h
         global/appSettings.h
+        global/audioManager.h
         entities/ball.h
         entities/ball.cpp
         physics/physicsEngine.h
