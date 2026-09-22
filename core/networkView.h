@@ -14,6 +14,13 @@ private:
     bool matchStarted = false;
     bool botMode = false; // Press [B] to let a bot play on this window for easy 1-player testing!
 
+    // LAN IP input — client types the host's local IP (e.g. 192.168.x.x) before pressing J
+    // TODO: replace this with a proper room-code system backed by a matchmaking server
+    //       so two players over the internet can connect without sharing IPs manually.
+    //       Need to learn: NAT traversal (STUN/TURN), or a simple relay server in Python.
+    char ipInput[64] = "127.0.0.1";
+    int  ipLen       = 9; // length of the default string above
+
 public:
     NetworkView(charData p1, charData p2) : GameView(p1, p2)
     {
@@ -40,8 +47,25 @@ public:
         // 1. Lobby Mode
         if (!netManager.IsConnected())
         {
+            // --- IP text input: backspace to delete, printable chars to type ---
+            if (netManager.GetRole() == NetworkRole::NONE || netManager.GetRole() == NetworkRole::CLIENT)
+            {
+                int ch = GetCharPressed();
+                while (ch > 0)
+                {
+                    // allow digits and dots only (valid IPv4 characters)
+                    if ((ch >= '0' && ch <= '9') || ch == '.' )
+                    {
+                        if (ipLen < 63) { ipInput[ipLen++] = (char)ch; ipInput[ipLen] = '\0'; }
+                    }
+                    ch = GetCharPressed();
+                }
+                if (IsKeyPressed(KEY_BACKSPACE) && ipLen > 0)
+                    ipInput[--ipLen] = '\0';
+            }
+
             if (IsKeyPressed(KEY_H)) netManager.StartHost(7777);
-            if (IsKeyPressed(KEY_J)) netManager.StartClient("127.0.0.1", 7777);
+            if (IsKeyPressed(KEY_J)) netManager.StartClient(ipInput, 7777);
             netManager.Update(dt);
 
             ball.Cx = WIDTH / 2;
@@ -127,21 +151,27 @@ public:
 
         if (!netManager.IsConnected())
         {
-            DrawRectangle(0, 0, WIDTH, HEIGHT, Fade(BLACK, 0.85f));
-            DrawText("MULTIPLAYER LOBBY", WIDTH / 2 - 170, HEIGHT / 2 - 70, 35, RAYWHITE);
+            DrawRectangle(0, 0, WIDTH, HEIGHT, Fade(BLACK, 0.92f));
+            DrawText("MULTIPLAYER LOBBY", WIDTH / 2 - 170, HEIGHT / 2 - 190, 35, RAYWHITE);
 
             if (netManager.GetRole() == NetworkRole::HOST)
             {
-                DrawText("HOSTING ON PORT 7777 - WAITING FOR P2...", WIDTH / 2 - 230, HEIGHT / 2, 22, YELLOW);
+                DrawText("HOSTING ON PORT 7777 — WAITING FOR P2...", WIDTH / 2 - 230, HEIGHT / 2 - 60, 22, YELLOW);
             }
             else if (netManager.GetRole() == NetworkRole::CLIENT)
             {
-                DrawText("CONNECTING TO 127.0.0.1:7777...", WIDTH / 2 - 180, HEIGHT / 2, 22, SKYBLUE);
+                DrawText("CONNECTING...", WIDTH / 2 - 90, HEIGHT / 2 - 60, 22, SKYBLUE);
             }
             else
             {
-                DrawText("Press [ H ] to Host Room (P1)", WIDTH / 2 - 140, HEIGHT / 2 - 10, 22, GREEN);
-                DrawText("Press [ J ] to Join Room (P2)", WIDTH / 2 - 140, HEIGHT / 2 + 30, 22, SKYBLUE);
+                DrawText("Press [ H ] to Host (P1)",      WIDTH / 2 - 130, HEIGHT / 2 - 100, 22, GREEN);
+                DrawText("Press [ J ] to Join (P2)",      WIDTH / 2 - 130, HEIGHT / 2 - 55,  22, SKYBLUE);
+
+                // IP input box — client types host's LAN IP here before pressing J
+                DrawText("Host IP:",                       WIDTH / 2 - 130, HEIGHT / 2 + 10,  20, GRAY);
+                DrawRectangleLines(WIDTH / 2 - 130, HEIGHT / 2 + 38, 260, 32, DARKGRAY);
+                DrawText(ipInput,                          WIDTH / 2 - 120, HEIGHT / 2 + 45,  20, WHITE);
+                DrawText("(type to edit, backspace to clear)", WIDTH / 2 - 130, HEIGHT / 2 + 82, 16, DARKGRAY);
             }
         }
         else
