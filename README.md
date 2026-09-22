@@ -114,6 +114,24 @@ cmake --build build --config Release
 ./build/PongArena
 ```
 
+### LAN Multiplayer
+Two machines on the same network can play against each other:
+
+1. **Host (P1):** Launch the game → select **Network** mode → press `H` to host on port 7777
+2. **Host:** Run `ipconfig` (Windows) or `ip a` (Linux) and note the local IPv4 address (e.g. `192.168.1.42`)
+3. **Client (P2):** Launch the game → select **Network** mode → clear the IP field, type the host's IP → press `J` to connect
+
+Once connected, the host runs the authoritative physics loop at 60 Hz and replicates state to the client each tick.
+
+### Network Stress Test
+A standalone multi-threaded harness in `tests/net_stress_test.cpp` fires 500+ packets per burst and logs RTT, delivery rate, and socket throughput to CSV.
+
+```bash
+# Build the stress test (requires ENet — already vendored in networking/)
+g++ -std=c++17 -DENET_IPV4_ONLY tests/net_stress_test.cpp networking/enet_impl.cpp -o stress_test -lws2_32
+./stress_test
+```
+
 ---
 
 ## Roadmap
