@@ -1,6 +1,6 @@
 # vStrike
 
-A cyberpunk-themed battle pong game built from scratch in C++17 and Raylib, compiled for both desktop and the web (WebAssembly).
+A multiplayer battle pong game built from scratch in C++17 and Raylib, compiled for both desktop and the web (WebAssembly).
 
 **Play in your browser:** [pixelsmoothie.github.io/vStrike](https://pixelsmoothie.github.io/vStrike/)
 
